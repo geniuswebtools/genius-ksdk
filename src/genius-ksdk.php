@@ -26,22 +26,85 @@ class GeniusKSDK {
      * https://developer.infusionsoft.com/docs/rest/#tag/REST-Hooks
      * 
      */
+
+    /**
+     * List Hook Event Types
+     * List the available types of Events that can be listened to
+     * https://developer.infusionsoft.com/docs/rest/#tag/REST-Hooks/operation/list_hook_event_types
+     * 
+     * @return stdClass Object
+     */
     public function resthookEvents() {
         return $this->request('/v1/hooks/event_keys');
     }
 
+    /**
+     * List Stored Hook Subscriptions
+     * Lists your hook subscriptions
+     * https://developer.infusionsoft.com/docs/rest/#tag/REST-Hooks/operation/list_stored_hook_subscriptions
+     * 
+     * @return stdClass Object
+     */
     public function resthooks() {
         return $this->request('/v1/hooks');
     }
 
-    public function createRestHook() {
-        
+    /**
+     * Create a Hook Subscription
+     * https://developer.infusionsoft.com/docs/rest/#tag/REST-Hooks/operation/create_a_hook_subscription
+     * 
+     * Payload: 
+     * {
+     *   "eventKey": "string",
+     *   "hookUrl": "string"
+     * }
+     * 
+     * @param string $payload JSON
+     * @return stdClass Object
+     */
+    public function createRestHook(string $payload) {
+        return $this->request('/v1/hooks', array(
+                    'method' => 'POST',
+                    'header' => 'Content-Type: application/json',
+                    'content' => $payload,
+        ));
+    }
+
+    /**
+     * Retrieve a Hook Subscription
+     * https://developer.infusionsoft.com/docs/rest/#tag/REST-Hooks/operation/retrieve_a_hook_subscription
+     * 
+     * Retrieves an existing hook subscription and its status.
+     * 
+     * If your hook subscription becomes inactive, you may request an activation 
+     * attempt via Verify a Hook Subscription.
+     * 
+     * @param int $key
+     * @return stdClass Object
+     */
+    public function getRestHook(int $key) {
+        return $this->request('/v1/hooks/' . $key);
+    }
+
+    /**
+     * Delete a Hook Subscription
+     * https://developer.infusionsoft.com/docs/rest/#tag/REST-Hooks/operation/delete_a_hook_subscription
+     * 
+     * Stop receiving hooks by deleting an existing hook subscription.
+     * 
+     * @param int $key
+     * @return stdClass Object
+     */
+    public function deleteRestHook(int $key) {
+        return $this->request('/v1/hooks/' . $key, array(
+                    'method' => 'DELETE',
+        ));
     }
 
     /**
      * @param string $endpoint
      * @param array $struct
-     * @return object
+     * @return stdClass Object
      */
     protected function request($endpoint, array $struct = null) {
         $options = $this->restruct($this->defaultOptions(), $struct);
@@ -64,6 +127,7 @@ class GeniusKSDK {
         if (!empty($content)) {
             $curlOpts[CURLOPT_POSTFIELDS] = $content;
         }
+
         $curl = curl_init();
         curl_setopt_array($curl, $curlOpts);
         $response = curl_exec($curl);
