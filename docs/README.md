@@ -20,9 +20,23 @@ REST API.
 - **CAN** be used with a single access key
 
 ##Usage##
+Load the class into your PHP code:
 
+```php
+require_once '/src/genius-ksdk.php';
+
+try {
+    $gKSDK = new \GeniusKSDK(array('apiKey' => 'YOUR_KEAP_API_KEY_GOES_HERE'));
+} catch (\Exception $ex) {
+    echo $ex->getMessage();
+    exit;
+}
+
+$hookEvents = $gKSDK->resthookEvents();
+echo '<pre>';
+print_r($hookEvents);
+echo '</pre>';
+```
 
 ---
-
-
 Make sure to checkout the [official Keap developer documentation](https://developer.infusionsoft.com/developer-guide/)
