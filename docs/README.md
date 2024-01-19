@@ -10,7 +10,7 @@ The class is **not** designed to work with the OAuth2 Authentication.
 _Testing proves that this authentication method can also use a Legacy API Key,
 but it would be better to use a Service Account Key._
 
-##Why use this PHP class?##
+##Why use this PHP class?
 Here's a quick list of the benefits for using this PHP class to access the Keap
 REST API.
 
