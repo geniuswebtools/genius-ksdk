@@ -1,5 +1,5 @@
 > [!IMPORTANT]
-> This class is not maintained by Keap, and is an independent project.
+> This class is not associated or maintained by Keap, and is an independent project.
 
 # Genius KSDK
 This class is designed to work with the Keap REST API using a Personal Access 
