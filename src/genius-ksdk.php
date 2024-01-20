@@ -29,30 +29,38 @@ class GeniusKSDK {
 
     /**
      * Retrieve a Contact
-     * https://developer.infusionsoft.com/docs/rest/#tag/Contact/operation/getContactUsingGET
+     * https://developer.keap.com/docs/restv2/#tag/Contact/operation/getContactUsingGET_1
+     * 
+     * $fields = Comma-delimited list of Contact properties to include in the response. 
+     * Available fields are: 
+     *  score_value, addresses, anniversary, birthday, company, contact_type, 
+     *  custom_fields, create_time, email_addresses, fax_numbers, job_title, 
+     *  update_date, leadsource_id, middle_name, origin, owner_id, phone_numbers, 
+     *  preferred_locale, preferred_name,prefix, relationships, social_accounts, 
+     *  source_type, spouse_name, suffix, time_zone,website, tag_ids, utm_parameters
      * 
      * @param int $id
-     * @param string $optional
-     * @return stdClass Object
+     * @param string $fields
+     * @return stdClass Object 
      */
-    public function getContact(int $id, $optional = 'custom_fields') {
-        $endpoint = '/v1/contacts/' . $id;
-        if (!empty($optional)) {
-            $endpoint .= '?optional_properties=' . $optional;
+    public function getContact(int $id, string $fields = '') {
+        $endpoint = '/v2/contacts/' . $id;
+        if (!empty($fields)) {
+            $endpoint .= '?fields=' . $fields;
         }
         return $this->request($endpoint);
     }
 
     /**
      * Update a Contact
-     * https://developer.infusionsoft.com/docs/rest/#tag/Contact/operation/updatePropertiesOnContactUsingPATCH
+     * https://developer.keap.com/docs/restv2/#tag/Contact/operation/patchContactUsingPATCH
      * 
      * @param int $id
      * @param string $payload
      * @return stdClass Object
      */
     public function updateContact(int $id, string $payload) {
-        return $this->request('/v1/contacts/' . $id, array(
+        return $this->request('/v2/contacts/' . $id, array(
                     'method' => 'PATCH',
                     'header' => 'Content-Type: application/json',
                     'content' => $payload,
