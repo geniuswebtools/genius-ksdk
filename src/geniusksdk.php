@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * 
+ * Keap Developer Guide
+ * https://developer.infusionsoft.com/developer-guide/
+ */
 class GeniusKSDK {
 
     /**
@@ -65,6 +70,21 @@ class GeniusKSDK {
                     'header' => 'Content-Type: application/json',
                     'content' => $payload,
         ));
+    }
+
+    /**
+     * List Contacts
+     * https://developer.infusionsoft.com/docs/restv2/#tag/Contact/operation/listContactsUsingGET_1
+     * 
+     * Retrieves a list of contacts
+     * https://integration.keap.com/t/rest-v2/85756/3
+     * 
+     * @param string $params
+     * @return stdClass Object
+     */
+    public function findContacts(array $params = null) {
+        $httpQuery = (($params !== null) ? '?' . http_build_query((array) $params, '', '&', PHP_QUERY_RFC3986) : '');
+        return $this->request('/v2/contacts' . $httpQuery);
     }
 
     /**
