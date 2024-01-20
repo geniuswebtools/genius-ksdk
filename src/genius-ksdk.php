@@ -32,8 +32,8 @@ class GeniusKSDK {
      * https://developer.infusionsoft.com/docs/rest/#tag/Contact/operation/getContactUsingGET
      * 
      * @param int $id
-     * @param type $optional
-     * @return type
+     * @param string $optional
+     * @return stdClass Object
      */
     public function getContact(int $id, $optional = 'custom_fields') {
         $endpoint = '/v1/contacts/' . $id;
@@ -47,8 +47,11 @@ class GeniusKSDK {
      * Update a Contact
      * https://developer.infusionsoft.com/docs/rest/#tag/Contact/operation/updatePropertiesOnContactUsingPATCH
      * 
+     * @param int $id
+     * @param string $payload
+     * @return stdClass Object
      */
-    public function updateContact($id, $payload) {
+    public function updateContact(int $id, string $payload) {
         return $this->request('/v1/contacts/' . $id, array(
                     'method' => 'PATCH',
                     'header' => 'Content-Type: application/json',
