@@ -33,6 +33,33 @@ class GeniusKSDK {
      */
 
     /**
+     * List Contacts
+     * https://developer.infusionsoft.com/docs/restv2/#tag/Contact/operation/listContactsUsingGET_1
+     * 
+     * Retrieves a list of contacts
+     * https://integration.keap.com/t/rest-v2/85756/3
+     * 
+     * @param string $params
+     * @return stdClass Object
+     */
+    public function findContacts(array $params = null) {
+        $httpQuery = (($params !== null) ? '?' . http_build_query((array) $params, '', '&', PHP_QUERY_RFC3986) : '');
+        return $this->request('/v2/contacts' . $httpQuery);
+    }
+
+    /**
+     * Retrieve Contact Model 
+     * https://developer.infusionsoft.com/docs/restv2/#tag/Contact/operation/retrieveContactModelUsingGET_1
+     * 
+     * Get the custom fields and optional properties for the Contact object
+     * 
+     * @return stdClass Object
+     */
+    public function retrieveContactModel() {
+        return $this->request('/v2/contacts/model');
+    }
+
+    /**
      * Retrieve a Contact
      * https://developer.keap.com/docs/restv2/#tag/Contact/operation/getContactUsingGET_1
      * 
@@ -70,21 +97,6 @@ class GeniusKSDK {
                     'header' => 'Content-Type: application/json',
                     'content' => $payload,
         ));
-    }
-
-    /**
-     * List Contacts
-     * https://developer.infusionsoft.com/docs/restv2/#tag/Contact/operation/listContactsUsingGET_1
-     * 
-     * Retrieves a list of contacts
-     * https://integration.keap.com/t/rest-v2/85756/3
-     * 
-     * @param string $params
-     * @return stdClass Object
-     */
-    public function findContacts(array $params = null) {
-        $httpQuery = (($params !== null) ? '?' . http_build_query((array) $params, '', '&', PHP_QUERY_RFC3986) : '');
-        return $this->request('/v2/contacts' . $httpQuery);
     }
 
     /**
