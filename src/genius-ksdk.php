@@ -22,6 +22,41 @@ class GeniusKSDK {
     }
 
     /**
+     * Contact
+     * https://developer.infusionsoft.com/docs/rest/#tag/Contact
+     * 
+     */
+
+    /**
+     * Retrieve a Contact
+     * https://developer.infusionsoft.com/docs/rest/#tag/Contact/operation/getContactUsingGET
+     * 
+     * @param int $id
+     * @param type $optional
+     * @return type
+     */
+    public function getContact(int $id, $optional = 'custom_fields') {
+        $endpoint = '/v1/contacts/' . $id;
+        if (!empty($optional)) {
+            $endpoint .= '?optional_properties=' . $optional;
+        }
+        return $this->request($endpoint);
+    }
+
+    /**
+     * Update a Contact
+     * https://developer.infusionsoft.com/docs/rest/#tag/Contact/operation/updatePropertiesOnContactUsingPATCH
+     * 
+     */
+    public function updateContact($id, $payload) {
+        return $this->request('/v1/contacts/' . $id, array(
+                    'method' => 'PATCH',
+                    'header' => 'Content-Type: application/json',
+                    'content' => $payload,
+        ));
+    }
+
+    /**
      * REST Hooks
      * https://developer.infusionsoft.com/docs/rest/#tag/REST-Hooks
      * 
