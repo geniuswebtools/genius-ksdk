@@ -33,6 +33,18 @@ class GeniusKSDK {
      */
 
     /**
+     * Retrieve Contact Model 
+     * https://developer.infusionsoft.com/docs/restv2/#tag/Contact/operation/retrieveContactModelUsingGET_1
+     * 
+     * Get the custom fields and optional properties for the Contact object
+     * 
+     * @return stdClass Object
+     */
+    public function retrieveContactModel() {
+        return $this->request('/v2/contacts/model');
+    }
+
+    /**
      * List Contacts
      * https://developer.infusionsoft.com/docs/restv2/#tag/Contact/operation/listContactsUsingGET_1
      * 
@@ -45,18 +57,6 @@ class GeniusKSDK {
     public function findContacts(array $params = null) {
         $httpQuery = (($params !== null) ? '?' . http_build_query((array) $params, '', '&', PHP_QUERY_RFC3986) : '');
         return $this->request('/v2/contacts' . $httpQuery);
-    }
-
-    /**
-     * Retrieve Contact Model 
-     * https://developer.infusionsoft.com/docs/restv2/#tag/Contact/operation/retrieveContactModelUsingGET_1
-     * 
-     * Get the custom fields and optional properties for the Contact object
-     * 
-     * @return stdClass Object
-     */
-    public function retrieveContactModel() {
-        return $this->request('/v2/contacts/model');
     }
 
     /**
@@ -96,6 +96,21 @@ class GeniusKSDK {
                     'method' => 'PATCH',
                     'header' => 'Content-Type: application/json',
                     'content' => $payload,
+        ));
+    }
+
+    /**
+     * Delete a Contact
+     * https://developer.infusionsoft.com/docs/restv2/#tag/Contact/operation/deleteContactUsingDELETE_1
+     * 
+     * Deletes the specified contact.
+     * 
+     * @param int $id
+     * @return stdClass Object
+     */
+    public function deleteContact(int $id) {
+        return $this->request('/v2/contacts/' . $id, array(
+                    'method' => 'DELETE',
         ));
     }
 
