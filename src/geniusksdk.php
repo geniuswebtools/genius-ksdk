@@ -60,6 +60,24 @@ class GeniusKSDK {
     }
 
     /**
+     * Create a Contact
+     * https://developer.infusionsoft.com/docs/restv2/#tag/Contact/operation/createContactUsingPOST_1
+     * 
+     * Note: Contact must contain at least one item in email_addresses or 
+     * phone_numbers and country_code is required if region is specified.
+     * 
+     * @param string $payload
+     * @return stdClass Object
+     */
+    public function createContact(string $payload) {
+        return $this->request('/v2/contacts', array(
+                    'method' => 'POST',
+                    'header' => 'Content-Type: application/json',
+                    'content' => $payload,
+        ));
+    }
+
+    /**
      * Retrieve a Contact
      * https://developer.keap.com/docs/restv2/#tag/Contact/operation/getContactUsingGET_1
      * 
