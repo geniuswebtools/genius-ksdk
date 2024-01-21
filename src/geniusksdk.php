@@ -298,7 +298,7 @@ class GeniusKSDK {
             'content-type' => '',
         );
         foreach ((array) array_slice((array) $struct, 1) as $keyValuePair) {
-            list($key, $value) = explode(':', $keyValuePair, 2);
+            list($key, $value) = array_map('trim', explode(':', $keyValuePair, 2));
             $header[strtolower($key)] = $value;
         }
         return $header;
