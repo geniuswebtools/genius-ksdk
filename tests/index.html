@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noodp" />
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+        <title>Genius KSDK Tests</title>
+    </head>
+    <body class="mb-5">
+        <div class="container">
+            <div class="row flex-nowrap">
+                <div class="col-auto px-0">
+                    <div class="border-end sticky-top">
+                        <ul class="nav nav-pills flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link" href="#contacts">Contacts</a>
+                                <nav class="nav nav-pills flex-column">
+                                    <a class="nav-link ms-3 my-1" href="#contacts-retrieve-contact-model">Retrieve Contact Model</a>
+                                    <a class="nav-link ms-3 my-1" href="#contacts-list-contacts">List Contacts</a>
+                                    <a class="nav-link ms-3 my-1" href="#contacts-create-contact">Create a Contact</a>
+                                    <a class="nav-link ms-3 my-1" href="#contacts-retrieve-contact">Retrieve a Contact</a>
+                                    <a class="nav-link ms-3 my-1" href="#contacts-update-contact">Update a Contact</a>
+                                    <a class="nav-link ms-3 my-1" href="#contacts-delete-contact">Delete a Contact</a>
+                                </nav>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#resthooks">REST Hooks</a>
+                                <nav class="nav nav-pills flex-column">
+                                    <a class="nav-link ms-3 my-1" href="#resthook-list-hook-event-types">List Hook Event Types</a>
+                                    <a class="nav-link ms-3 my-1" href="#resthook-list-stored-hook-subscriptions">List Stored Hook Subscriptions</a>
+                                    <a class="nav-link ms-3 my-1" href="#resthook-create-hook-subscription">Create a Hook Subscription</a>
+                                    <a class="nav-link ms-3 my-1" href="#resthook-retrieve-hook-subscription">Retrieve a Hook Subscription</a>
+                                    <a class="nav-link ms-3 my-1" href="#resthook-delete-hook-subscription">Delete a Hook Subscription</a>
+                                    <a class="nav-link ms-3 my-1" href="#resthook-verify-hook-subscription">Verify a Hook Subscription</a>
+                                </nav>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col ps-md-2 pt-2">
+                    <div class="pt-3">
+                        <h2><a href="https://github.com/geniuswebtools/genius-ksdk" rel=”nofollow” target="_blank">Genius KSDK</a> Testing Suite</h2>
+                        <hr>
+                    </div>
+                    <div class="container mb-3">
+                        <div class="row align-items-start">
+                            <div class="col">
+                                <p>To start testing it is recommended that you create a temporary Personal Access Token or a Service Account Key in a <span class="sandbox-account-url">Keap sandbox account</span>.</p>
+                                <p>This api key will be passed in each test request, and by using a temporary key, it can safely be deleted from your account, once your testing is complete.</p>
+                            </div>
+                            <div class="col">
+                                <label for="apiKey" class="form-label">Enter your Personal Access Token or a Service Account Key.</label>
+                                <input type="text" class="form-control" id="apiKey" aria-describedby="apiKeyHelp" placeholder="KeapAK-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx">
+                                <div id="apiKeyHelp" class="form-text">It is recommended to use a <span class="sandbox-account-url">sandbox account</span> with these tests.</div>
+                                <button type="button" class="btn btn-primary set-apikey mt-3">Set API Key</button>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-12">
+                            <a name="contacts"></a>
+                            <h3 class="border-bottom pb-2">
+                                Contacts
+                            </h3>
+                            <div id="contacts-retrieve-contact-model" class="mt-3 api-test-container">
+                                <p class="lead">
+                                    Retrieve Contact Model <span class="badge bg-secondary">V2</span>
+                                    <button type="button" class="btn btn-sm btn-secondary" data-api-test-btn="info" data-simple-api="contact.retrieve.model" disabled>Run Test</button>
+                                </p>
+                            </div>
+                            <div id="contacts-list-contacts" class="mt-3 api-test-container">
+                                <p class="lead">List Contacts <span class="badge bg-secondary">V2</span></p>
+                                <code>TODO</code>
+                            </div>
+                            <div id="contacts-create-contact" class="mt-3 api-test-container">
+                                <p class="lead">Create a Contact <span class="badge bg-secondary">V2</span></p>
+                                <code>TODO</code>
+                            </div>
+                            <div id="contacts-retrieve-contact" class="mt-3 api-test-container">
+                                <p class="lead">Retrieve a Contact <span class="badge bg-secondary">V2</span></p>
+                                <code>TODO</code>
+                            </div>
+                            <div id="contacts-update-contact" class="mt-3 api-test-container">
+                                <p class="lead">Update a Contact <span class="badge bg-secondary">V2</span></p>
+                                <code>TODO</code>
+                            </div>
+                            <div id="contacts-delete-contact" class="mt-3 api-test-container">
+                                <p class="lead">Delete a Contact <span class="badge bg-secondary">V2</span></p>
+                                <code>TODO</code>
+                            </div>
+                            <a name="resthooks"></a>
+                            <h3 class="border-bottom pb-2">
+                                REST Hooks
+                            </h3>
+                            <div id="#resthook-list-hook-event-types" class="mt-3 api-test-container">
+                                <p class="lead">List Hook Event Types <span class="badge bg-secondary-subtle text-secondary">V1</span></p>
+                                <code>TODO</code>
+                            </div>
+                            <div id="resthook-list-stored-hook-subscriptions" class="mt-3 api-test-container">
+                                <p class="lead">List Stored Hook Subscriptions <span class="badge bg-secondary-subtle text-secondary">V1</span></p>
+                                <code>TODO</code>
+                            </div>
+                            <div id="resthook-create-hook-subscription" class="mt-3 api-test-container">
+                                <p class="lead">Create a Hook Subscription <span class="badge bg-secondary-subtle text-secondary">V1</span></p>
+                                <code>TODO</code>
+                            </div>
+                            <div id="resthook-retrieve-hook-subscription" class="mt-3 api-test-container">
+                                <p class="lead">Retrieve a Hook Subscription <span class="badge bg-secondary-subtle text-secondary">V1</span></p>
+                                <code>TODO</code>
+                            </div>
+                            <div id="resthook-delete-hook-subscription" class="mt-3 api-test-container">
+                                <p class="lead">Delete a Hook Subscription <span class="badge bg-secondary-subtle text-secondary">V1</span></p>
+                                <code>TODO</code>
+                            </div>
+                            <div id="resthook-verify-hook-subscription" class="mt-3 api-test-container">
+                                <p class="lead">Verify a Hook Subscription <span class="badge border bg-light text-body-tertiary">N/A</span></p>
+                                <code>TODO</code>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <template id="logEntry">
+            <div class="container text-center border border-dark">
+                <div class="row bg-dark-subtle border-bottom border-dark">
+                    <div class="col p-2 border-end border-dark">
+                        <strong>Engine</strong>
+                    </div>
+                    <div class="col p-2 border-end border-dark">
+                        <strong>Method</strong>
+                    </div>
+                    <div class="col p-2 border-end border-dark">
+                        <strong>Code</strong>
+                    </div>
+                    <div class="col p-2">
+                        <strong>Error</strong>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col p-2 border-end border-dark">
+                        {engine}
+                    </div>
+                    <div class="col p-2 border-end border-dark">
+                        {method}
+                    </div>
+                    <div class="col p-2 border-end border-dark">
+                        {code}
+                    </div>
+                    <div class="col p-2">
+                        {error}
+                    </div>
+                </div>
+            </div>
+            <div class="container border border-top-0 border-dark">
+                <div class="row justify-content-start text-center bg-dark-subtle border-bottom border-dark">
+                    <div class="col col-1 p-2 border-end border-dark">
+                        <strong>Object</strong>
+                    </div>
+                    <div class="col p-2">
+                        <strong>Data</strong>
+                    </div>
+                </div>
+                <div class="row justify-content-start border-bottom border-dark">
+                    <div class="col col-1 p-2 border-end border-dark">
+                        Payload
+                    </div>
+                    <div class="col p-2">
+                        <textarea readonly rows="3" class="form-control-plaintext w-100" >{payload}</textarea>
+                    </div>
+                </div>
+                <div class="row justify-content-start border-bottom border-dark">
+                    <div class="col col-1 p-2 border-end border-dark">
+                        Headers
+                    </div>
+                    <div class="col p-2">
+                        <textarea readonly rows="5" class="form-control-plaintext w-100">{headers}</textarea>
+                    </div>
+                </div>
+                <div class="row justify-content-start">
+                    <div class="col col-1 p-2 border-end border-dark">
+                        Response
+                    </div>
+                    <div class="col p-2">
+                        <textarea readonly rows="5" class="form-control-plaintext w-100" >{cotent}</textarea>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+        <script>
+            try {
+                jQuery(function ($) {
+                    function apiKey() {
+                        return $('#apiKey').val().toString();
+                    }
+
+                    $('form').on('submit', function (e) {
+                        e.preventDefault();
+                    });
+                    $(document).on('disableTests', function (e) {
+                        $('[data-api-test-btn]').each(function (i) {
+                            $(this).removeClass(`btn-${$(this).data('apiTestBtn')}`).addClass('btn-secondary').attr('disabled', 'disabled');
+                        });
+                    });
+                    $(document).on('enableTests', function (e) {
+                        if (apiKey().indexOf(`KeapAK-`) !== -1) {
+                            $('#apiKey').addClass('bg-success-subtle');
+                        } else {
+                            $('#apiKey').addClass('bg-warning-subtle');
+                        }
+
+                        $('[data-api-test-btn]').each(function (i) {
+                            $(this).removeClass('btn-secondary').addClass(`btn-${$(this).data('apiTestBtn')}`).removeAttr('disabled');
+                        });
+                    });
+                    $(document).on('setAPIKey', function (e) {
+                        $('#apiKey').removeClass('bg-warning-subtle bg-success-subtle');
+                        if (apiKey() === '') {
+                            $(document).trigger('disableTests');
+                            return;
+                        }
+                        $(document).trigger('enableTests');
+                    });
+                    $(document).on('blur', '#apiKey', function (e) {
+                        if (apiKey() === '') {
+                            $(document).trigger('setAPIKey');
+                        }
+                    });
+                    $(document).on('click', '.set-apikey', function (e) {
+                        $(document).trigger('setAPIKey');
+                    });
+                    $(document).on('logResult', function (e, accordionEl, json) {
+                        console.log(typeof json, json);
+                        let entries = accordionEl.find('.accordion-item').length;
+                        let resultGrid = $('#logEntry').html().toString()
+                                .replace(/{engine}/g, json.request.engine)
+                                .replace(/{method}/g, json.request.method)
+                                .replace(/{code}/g, json.request.header.code)
+                                .replace(/{error}/g, json.request.error)
+                                .replace(/{payload}/g, JSON.stringify(json.payload, null, "\t"))
+                                .replace(/{headers}/g, JSON.stringify(json.request.header, null, "\t"))
+                                .replace(/{cotent}/g, JSON.stringify(json.request.content, null, "\t"));
+
+                        let addordionItemId = 'aI-' + (json.request.header['x-request-id'] || Math.random().toString(20).substr(2, 15));
+                        accordionEl.append(`<div class="accordion-item">
+                            <h2 class="accordion-header">
+                              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#${addordionItemId}" aria-expanded="true" aria-controls="${addordionItemId}">
+                                Log Entry #${(entries + 1)}
+                              </button>
+                            </h2>
+                            <div id="${addordionItemId}" class="accordion-collapse collapse show" data-bs-parent="#${accordionEl.attr('id')}">
+                              <div class="accordion-body">
+                                ${resultGrid}
+                              </div>
+                            </div>
+                          </div>
+                        `);
+                    });
+                    $(document).on('click', '[data-simple-api]:not([disabled])', function (e) {
+                        const parent = $(this).parents('.api-test-container');
+                        let logEl = parent.find('div.log');
+                        let accordionId = `accordion-${parent.attr('id')}`;
+                        if (logEl.length === 0) {
+                            parent.append(`<div class="log accordion my-3" id="${accordionId}"></div>`);
+                            console.log(`added accordion parent`);
+                        } else {
+                            console.log(`found accordion parent`);
+                        }
+
+                        const data = {apiKey: apiKey(), apiCall: $(this).data('simpleApi')};
+                        $.post('ajax.php', data, function (json) {
+                            $(document).trigger('logResult', [$(`#${accordionId}`), json]);
+                        }, 'json');
+                    });
+                    $('.sandbox-account-url').wrap(`<a href="https://developer.infusionsoft.com/resources/sandbox-application/" rel=”nofollow” target="_blank"></a>`);
+                    $(document).trigger('setAPIKey');
+                });
+            } catch (e) {
+                console.warn(`jQuery not loaded!`);
+            }
+        </script>
+    </body>
+</html>
