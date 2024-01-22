@@ -47,15 +47,26 @@ switch ($apiCall) {
         $result = $gKSDK->retrieveContactModel();
         break;
     case 'contact.list':
-//        $params = array(
-//            'filter' => 'email==genius@a2m3.com',
-//            'order_by' => 'id desc',
-//            'page_size' => 1000,
-//            'optional_properties' => 'email_addresses,custom_fields,tag_ids',
-//        );
         $params = $payload;
         $result = $gKSDK->findContacts($payload);
         $payload = (($params !== null) ? '?' . http_build_query((array) $params, '', '&', PHP_QUERY_RFC3986) : '');
+        break;
+    case 'contact.create.contact':
+//        $payload = array(
+//            'given_name' => 'Genius',
+//            'family_name' => 'KSDK',
+//            'job_title' => 'Developer',
+//            'email_addresses' => array(
+//                (object) array(
+//                    'email' => 'gksdk@a2m3.com',
+//                    'field' => 'EMAIL1',
+//                    'opt_in_reason' => 'I own the domain and I am testing the API in my sandbox account. ;)'
+//                ),
+//            ),
+//        );
+        $params = json_encode($payload);
+        $result = $gKSDK->createContact($params);
+        $payload = $params;
         break;
     // Resthooks
     case 'resthook.list.event.types':

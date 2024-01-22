@@ -70,7 +70,7 @@
                             <div id="contacts-retrieve-contact-model" class="mt-3 api-test-container">
                                 <p class="lead">
                                     Retrieve Contact Model <span class="badge bg-secondary">V2</span>
-                                    <button type="button" class="btn btn-sm btn-secondary" data-api-test-btn="info" data-simple-api="contact.retrieve.model" disabled>Run Test</button>
+                                    <button type="button" class="btn btn-sm btn-secondary" data-api-test-btn="info" data-call-api="contact.retrieve.model" disabled>Run Test</button>
                                 </p>
                             </div>
                             <div id="contacts-list-contacts" class="mt-3 api-test-container">
@@ -147,17 +147,57 @@
                                             <div id="listContactOptionalPropertiesHelp" class="form-text">Comma-delimited list of Contact properties to include in the response. These fields can be found by <a href="#contacts-retrieve-contact-model">retrieving the contact model.</a></div>
                                         </div>
                                     </div>
-
-
-
-
-
-                                    <button type="button" class="btn btn-sm btn-secondary" data-api-test-btn="info" data-simple-api="contact.list" data-payload="yes" disabled>Run Test</button>
+                                    <button type="button" class="btn btn-sm btn-secondary" data-api-test-btn="primary" data-call-api="contact.list" data-payload="yes" disabled>Send Filter</button>
                                 </form>
                             </div>
                             <div id="contacts-create-contact" class="mt-3 api-test-container">
                                 <p class="lead">Create a Contact <span class="badge bg-secondary">V2</span></p>
-                                <code>TODO</code>
+                                <form data-payload="contact.create.contact" data-payload-format="json">
+                                    <div class="alert alert-info" role="alert">
+                                        Note: Contact must contain at least one item in email_addresses or phone_numbers and country_code is required if region is specified.
+                                    </div>
+                                    <p><strong>General Information</strong></p>
+                                    <div class="ms-5">
+                                        <div class="mb-3">
+                                            <label for="createContactGiveName" class="form-label">First name</label>
+                                            <input name="given_name" type="text" class="form-control" id="createContactGiveName" placeholder="given name">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="createContactFamilyName" class="form-label">Last name</label>
+                                            <input name="family_name" type="text" class="form-control" id="createContactFamilyName" placeholder="family name">
+                                        </div>
+                                    </div>
+                                    <p><strong>Email & Social Media</strong></p>
+                                    <div class="ms-5">
+                                        <div class="mb-3">
+                                            <div class="input-group">
+                                                <span class="input-group-text">EMAIL1</span>
+                                                <input type="email" class="form-control" placeholder="name@domain.tld" data-input-x-value="#createContactEmailAddress0Email">
+                                                <input type="text" class="form-control" placeholder="Opt in reason?" data-input-x-value="#createContactEmailAddress0OptInReason">
+                                            </div>
+                                            <input type="hidden" name="email_addresses.0.email" id="createContactEmailAddress0Email" data-input-p-trigger="#createContactEmailAddress0Field">
+                                            <input type="hidden" name="email_addresses.0.field" id="createContactEmailAddress0Field" data-p-value="EMAIL1">
+                                            <input type="hidden" name="email_addresses.0.opt_in_reason" id="createContactEmailAddress0OptInReason">
+                                        </div>
+                                        <div class="mb-3">
+                                            <div class="input-group">
+                                                <span class="input-group-text">EMAIL2</span>
+                                                <input type="email" name="email_addresses[1][email]" class="form-control" placeholder="name@domain.tld" data-input-p-trigger="#createContactEmailAddress1Field">
+                                                <input type="hidden" name="email_addresses[1][field]" id="createContactEmailAddress1Field" data-p-value="EMAIL2">
+                                                <input type="text" name="email_addresses[1][opt_in_reason]" class="form-control" placeholder="Opt in reason?">
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <div class="input-group">
+                                                <span class="input-group-text">EMAIL3</span>
+                                                <input type="email" name="email_addresses[2][email]" class="form-control" placeholder="name@domain.tld" data-input-p-trigger="#createContactEmai2Address0Field">
+                                                <input type="hidden" name="email_addresses[2][field]" id="createContactEmai2Address0Field" data-p-value="EMAIL3">
+                                                <input type="text" name="email_addresses[2][opt_in_reason]" class="form-control" placeholder="Opt in reason?">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button type="button" class="btn btn-sm btn-secondary" data-api-test-btn="primary" data-call-api="contact.create.contact" data-payload="yes" disabled>Create Contact</button>
+                                </form>
                             </div>
                             <div id="contacts-retrieve-contact" class="mt-3 api-test-container">
                                 <p class="lead">Retrieve a Contact <span class="badge bg-secondary">V2</span></p>
@@ -178,13 +218,13 @@
                             <div id="resthook-list-hook-event-types" class="mt-3 api-test-container">
                                 <p class="lead">
                                     List Hook Event Types <span class="badge bg-secondary-subtle text-secondary">V1</span>
-                                    <button type="button" class="btn btn-sm btn-secondary" data-api-test-btn="info" data-simple-api="resthook.list.event.types" disabled>Run Test</button>
+                                    <button type="button" class="btn btn-sm btn-secondary" data-api-test-btn="info" data-call-api="resthook.list.event.types" disabled>Run Test</button>
                                 </p>
                             </div>
                             <div id="resthook-list-stored-hook-subscriptions" class="mt-3 api-test-container">
                                 <p class="lead">
                                     List Stored Hook Subscriptions <span class="badge bg-secondary-subtle text-secondary">V1</span>
-                                    <button type="button" class="btn btn-sm btn-secondary" data-api-test-btn="info" data-simple-api="resthook.list.stored.hooks" disabled>Run Test</button>
+                                    <button type="button" class="btn btn-sm btn-secondary" data-api-test-btn="info" data-call-api="resthook.list.stored.hooks" disabled>Run Test</button>
                                 </p>
                             </div>
                             <div id="resthook-create-hook-subscription" class="mt-3 api-test-container">
@@ -297,13 +337,56 @@
                             }
                             if (name.indexOf('.') !== -1) {
                                 let named = name.split('.');
-                                console.log(named);
-                                let type = named[0];
+                                let key = named[0];
                                 name = named[1];
-                                if (!payload[type]) {
-                                    payload[type] = '';
+                                if (!payload[key]) {
+                                    payload[key] = '';
                                 }
-                                payload[type] += `${name}==${value};`;
+                                payload[key] += `${name}==${value};`;
+                            } else {
+                                payload[name] = value;
+                            }
+                        });
+                        return payload;
+                    }
+
+                    function payloadJSON(payloadForm) {
+                        const payload = {};
+                        payloadForm.find(':input').each(function (i) {
+                            let name = $(this).attr('name') || '';
+                            let value = $(this).val();
+                            if ((name === '') || (value === '')) {
+                                return;
+                            }
+                            if (name.indexOf('.') !== -1) {
+                                let named = name.split('.');
+                                console.log(named);
+
+                                let key = null;
+                                let indx = null;
+                                switch (named.length) {
+                                    case 3:
+                                        key = named[0];
+                                        indx = named[1];
+                                        name = named[2];
+                                        break;
+                                    case 2:
+                                    default:
+                                        key = named[0];
+                                        name = named[1];
+                                        break;
+                                }
+                                if (!payload[key]) {
+                                    payload[key] = {};
+                                }
+                                if ((indx !== null)) {
+                                    if (!payload[key][indx]) {
+                                        payload[key][indx] = {};
+                                    }
+                                    payload[key][indx][name] = value;
+                                } else {
+                                    payload[key][name] = value;
+                                }
                             } else {
                                 payload[name] = value;
                             }
@@ -343,7 +426,12 @@
                     $(document).on('click', '.set-apikey', function (e) {
                         $(document).trigger('setAPIKey');
                     });
-                    $(document).on('change', '[data-input-x-value]', function (e) {
+
+                    /**
+                     * Transfer the concatenated values from multiple unnamed 
+                     * fields to the value of a named field.
+                     */
+                    $(document).on('change blur keyup', '[data-input-x-value]', function (e) {
                         const self = $(this);
                         const inputTarget = self.data('inputXValue');
                         const inputEl = $(inputTarget);
@@ -357,8 +445,22 @@
                             vals.push(candidate);
                         });
 
-                        inputEl.val(vals.join(seperator));
+                        inputEl.val(vals.join(seperator)).trigger('change');
                     });
+
+                    /**
+                     * Populate static value into field when the trigger field
+                     * contains a value.  Emtpy field if the trigger field value
+                     * is empty.
+                     */
+                    $(document).on('change blur keyup', '[data-input-p-trigger]', function (e) {
+                        const self = $(this);
+                        const inputTarget = self.data('inputPTrigger');
+                        const inputEl = $(inputTarget);
+                        let ue = ((self.val() !== '') ? inputEl.data('pValue') : '');
+                        inputEl.val(ue);
+                    });
+
                     $(document).on('logResult', function (e, accordionEl, json) {
                         console.log(typeof json, json);
                         let entries = accordionEl.find('.accordion-item').length;
@@ -386,7 +488,7 @@
                           </div>
                         `);
                     });
-                    $(document).on('click', '[data-simple-api]:not([disabled])', function (e) {
+                    $(document).on('click', '[data-call-api]:not([disabled])', function (e) {
                         const parent = $(this).parents('.api-test-container');
                         let logEl = parent.find('div.log');
                         let accordionId = `accordion-${parent.attr('id')}`;
@@ -396,22 +498,24 @@
                         let payload = null;
                         let hasPayload = $(this).data('payload');
                         if (hasPayload === 'yes') {
-                            let payloadForm = $(`[data-payload="${$(this).data('simpleApi')}"]`);
+                            let payloadForm = $(`[data-payload="${$(this).data('callApi')}"]`);
                             let payloadFormat = payloadForm.data('payloadFormat');
                             switch (payloadFormat) {
+                                case 'json':
+                                    payload = payloadJSON(payloadForm);
+//                                    console.log(payload);
+//                                    return;
+                                    break;
                                 case 'filter':
                                 default:
                                     payload = payloadFilter(payloadForm);
                                     break;
                             }
                         }
-                        const data = {apiKey: apiKey(), apiCall: $(this).data('simpleApi')};
+                        const data = {apiKey: apiKey(), apiCall: $(this).data('callApi')};
                         if (payload !== null) {
                             data.payload = payload;
                         }
-
-                        //                        console.log(data);
-                        //                        return;
 
                         $.post('ajax.php', data, function (json) {
                             $(document).trigger('logResult', [$(`#${accordionId}`), json]);
