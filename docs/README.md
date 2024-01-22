@@ -19,6 +19,11 @@ REST API.
 - Does **NOT** require Composer
 - **CAN** be used with a single access key
 
+## Why not use this PHP class?
+Not all things are perfect, and this code is no exception.
+
+- Does **NOT** work with the Legacy XML-RPC API
+
 ## Usage
 Load the class into your PHP code:
 
