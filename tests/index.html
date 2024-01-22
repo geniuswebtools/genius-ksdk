@@ -75,10 +75,85 @@
                             </div>
                             <div id="contacts-list-contacts" class="mt-3 api-test-container">
                                 <p class="lead">List Contacts <span class="badge bg-secondary">V2</span></p>
-                                <code>TODO</code>
-<!--                                <form>
-                                    <button type="submit" class="btn btn-sm btn-secondary" data-api-test-btn="info" data-complex-api="contact.list" disabled>Run Test</button>
-                                </form>-->
+                                <form data-payload="contact.list" data-payload-format="filter">
+                                    <p><strong>Filter</strong></p>
+                                    <div class="ms-5">
+                                        <div class="mb-3">
+                                            <label for="listContactEmail" class="form-label">Email address</label>
+                                            <input name="filter.email" type="email" class="form-control" id="listContactEmail" placeholder="name@domain.tld">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="listContactGiveName" class="form-label">First name</label>
+                                            <input name="filter.given_name" type="text" class="form-control" id="listContactGiveName" placeholder="given name">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="listContactFamilyName" class="form-label">Last name</label>
+                                            <input name="filter.family_name" type="text" class="form-control" id="listContactFamilyName" placeholder="family name">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="listContactCompanyId" class="form-label">Company Id</label>
+                                            <input name="filter.company_id" type="text" class="form-control" id="listContactCompanyId" placeholder="Company Id">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="listContactContactIds" class="form-label">Contact Id(s)</label>
+                                            <input name="filter.contact_ids" type="text" class="form-control" id="listContactContactIds" placeholder="Contact Ids: 54,22,111">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="listContactUpdateStartTime" class="form-label">Last Updated Start Time</label>
+                                            <input name="filter.start_update_time" type="text" class="form-control" id="listContactUpdateStartTime" placeholder="ISO 8601 date: YYYY-MM-DDTHH:MM:SS+00:00">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="listContactUpdateEndTime" class="form-label">Last Updated End Time</label>
+                                            <input name="filter.end_update_time" type="text" class="form-control" id="listContactUpdateEndTime" placeholder="ISO 8601 date: YYYY-MM-DDTHH:MM:SS+00:00">
+                                        </div>
+                                    </div>
+                                    <p><strong>Order By</strong></p>
+                                    <div class="ms-5">
+                                        <div class="mb-3">
+                                            <div class="input-group">
+                                                <select class="form-select" data-input-x-value="#contactListOrderBy">
+                                                    <option value="">Attribute</option>
+                                                    <option value="id">Id</option>
+                                                    <option value="date_created">Date Created</option>
+                                                    <option value="email">Email</option>
+                                                </select>
+                                                <select class="form-select" data-input-x-value="#contactListOrderBy">
+                                                    <option value="">Direction</option>
+                                                    <option value="asc">Ascending</option>
+                                                    <option value="desc">Descending</option>
+                                                </select>
+                                            </div>
+                                            <input type="hidden" name="order_by" id="contactListOrderBy" data-input-x-sep=" " />
+                                        </div>
+                                    </div>
+                                    <p><strong>Page Size</strong></p>
+                                    <div class="ms-5">
+                                        <div class="mb-3">
+                                            <input name="page_size" type="number" step="100" min="1" max="1000" class="form-control" id="listContactPageSize" placeholder="Max: 1000" aria-describedby="listContactPageSizeHelp">
+                                            <div id="listContactPageSizeHelp" class="form-text">Total number of items to return per page</div>
+                                        </div>
+                                    </div>
+                                    <p><strong>Page Token</strong></p>
+                                    <div class="ms-5">
+                                        <div class="mb-3">
+                                            <input name="page_token" type="text" class="form-control" id="listContactPageToken" aria-describedby="listContactPageTokenHelp">
+                                            <div id="listContactPageTokenHelp" class="form-text">Used to retrieve the next page</div>
+                                        </div>
+                                    </div>
+                                    <p><strong>Optional Properties</strong></p>
+                                    <div class="ms-5">
+                                        <div class="mb-3">
+                                            <input name="optional_properties" type="text" class="form-control" id="listContactOptionalProperties" placeholder="lead_source_id, custom_fields, job_title" aria-describedby="listContactOptionalPropertiesHelp">
+                                            <div id="listContactOptionalPropertiesHelp" class="form-text">Comma-delimited list of Contact properties to include in the response. These fields can be found by <a href="#contacts-retrieve-contact-model">retrieving the contact model.</a></div>
+                                        </div>
+                                    </div>
+
+
+
+
+
+                                    <button type="button" class="btn btn-sm btn-secondary" data-api-test-btn="info" data-simple-api="contact.list" data-payload="yes" disabled>Run Test</button>
+                                </form>
                             </div>
                             <div id="contacts-create-contact" class="mt-3 api-test-container">
                                 <p class="lead">Create a Contact <span class="badge bg-secondary">V2</span></p>
@@ -204,13 +279,38 @@
         <script>
             try {
                 jQuery(function ($) {
+                    $('form').on('submit', function (e) {
+                        e.preventDefault();
+                    });
+
                     function apiKey() {
                         return $('#apiKey').val().toString();
                     }
 
-                    $('form').on('submit', function (e) {
-                        e.preventDefault();
-                    });
+                    function payloadFilter(payloadForm) {
+                        const payload = {};
+                        payloadForm.find(':input').each(function (i) {
+                            let name = $(this).attr('name') || '';
+                            let value = $(this).val();
+                            if ((name === '') || (value === '')) {
+                                return;
+                            }
+                            if (name.indexOf('.') !== -1) {
+                                let named = name.split('.');
+                                console.log(named);
+                                let type = named[0];
+                                name = named[1];
+                                if (!payload[type]) {
+                                    payload[type] = '';
+                                }
+                                payload[type] += `${name}==${value};`;
+                            } else {
+                                payload[name] = value;
+                            }
+                        });
+                        return payload;
+                    }
+
                     $(document).on('disableTests', function (e) {
                         $('[data-api-test-btn]').each(function (i) {
                             $(this).removeClass(`btn-${$(this).data('apiTestBtn')}`).addClass('btn-secondary').attr('disabled', 'disabled');
@@ -242,6 +342,22 @@
                     });
                     $(document).on('click', '.set-apikey', function (e) {
                         $(document).trigger('setAPIKey');
+                    });
+                    $(document).on('change', '[data-input-x-value]', function (e) {
+                        const self = $(this);
+                        const inputTarget = self.data('inputXValue');
+                        const inputEl = $(inputTarget);
+                        const seperator = inputEl.data('inputXSep');
+                        let vals = [];
+                        $(`[data-input-x-value="${inputTarget}"]`).each(function (i) {
+                            const candidate = $(this).val();
+                            if (candidate === '') {
+                                return;
+                            }
+                            vals.push(candidate);
+                        });
+
+                        inputEl.val(vals.join(seperator));
                     });
                     $(document).on('logResult', function (e, accordionEl, json) {
                         console.log(typeof json, json);
@@ -276,12 +392,27 @@
                         let accordionId = `accordion-${parent.attr('id')}`;
                         if (logEl.length === 0) {
                             parent.append(`<div class="log accordion my-3" id="${accordionId}"></div>`);
-                            console.log(`added accordion parent`);
-                        } else {
-                            console.log(`found accordion parent`);
+                        }
+                        let payload = null;
+                        let hasPayload = $(this).data('payload');
+                        if (hasPayload === 'yes') {
+                            let payloadForm = $(`[data-payload="${$(this).data('simpleApi')}"]`);
+                            let payloadFormat = payloadForm.data('payloadFormat');
+                            switch (payloadFormat) {
+                                case 'filter':
+                                default:
+                                    payload = payloadFilter(payloadForm);
+                                    break;
+                            }
+                        }
+                        const data = {apiKey: apiKey(), apiCall: $(this).data('simpleApi')};
+                        if (payload !== null) {
+                            data.payload = payload;
                         }
 
-                        const data = {apiKey: apiKey(), apiCall: $(this).data('simpleApi')};
+                        //                        console.log(data);
+                        //                        return;
+
                         $.post('ajax.php', data, function (json) {
                             $(document).trigger('logResult', [$(`#${accordionId}`), json]);
                         }, 'json');

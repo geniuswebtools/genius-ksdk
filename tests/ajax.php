@@ -39,13 +39,23 @@ try {
     exit;
 }
 
+$payload = ((isset($_POST['payload'])) ? $_POST['payload'] : null);
+
 switch ($apiCall) {
     // Contacts
     case 'contact.retrieve.model':
         $result = $gKSDK->retrieveContactModel();
         break;
     case 'contact.list':
-
+//        $params = array(
+//            'filter' => 'email==genius@a2m3.com',
+//            'order_by' => 'id desc',
+//            'page_size' => 1000,
+//            'optional_properties' => 'email_addresses,custom_fields,tag_ids',
+//        );
+        $params = $payload;
+        $result = $gKSDK->findContacts($payload);
+        $payload = (($params !== null) ? '?' . http_build_query((array) $params, '', '&', PHP_QUERY_RFC3986) : '');
         break;
     // Resthooks
     case 'resthook.list.event.types':
@@ -71,6 +81,6 @@ header('Pragma: no-cache');
 
 header('Content-Type: application/json');
 echo json_encode(array(
-    'payload' => ((isset($_POST['payload'])) ? $_POST['payload'] : null),
+    'payload' => $payload,
     'request' => $result,
 ));
