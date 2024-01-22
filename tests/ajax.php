@@ -40,8 +40,19 @@ try {
 }
 
 switch ($apiCall) {
+    // Contacts
     case 'contact.retrieve.model':
         $result = $gKSDK->retrieveContactModel();
+        break;
+    case 'contact.list':
+
+        break;
+    // Resthooks
+    case 'resthook.list.event.types':
+        $result = $gKSDK->resthookEvents();
+        break;
+    case 'resthook.list.stored.hooks':
+        $result = $gKSDK->resthooks();
         break;
     default:
         $result = array(
