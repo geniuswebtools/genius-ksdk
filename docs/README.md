@@ -30,7 +30,12 @@ Rarly is any thing perfect, and this code is no exception.
 - Does **NOT** work with the Legacy XML-RPC API
 
 ## Usage
-Load the library into your PHP code:
+Load the library into your PHP code.  The lirary contains generic CRUD methods
+that can be used to make requests to most of the Keap API.
+- create()
+- read()
+- update()
+- detele()
 
 ```php
 require_once '/src/genius-ksdk.php';
@@ -42,10 +47,71 @@ try {
     exit;
 }
 
-$hookEvents = $gKSDK->resthookEvents();
+/**
+ * Retrieve a Contact Model using read() or the provided retrieveContactModel() 
+ * helper mehod.
+ */
+$result = $gKSDK->read('/v2/contacts/model'); // Generic Method
 echo '<pre>';
-print_r($hookEvents);
+print_r($result);
 echo '</pre>';
+
+$result = $gKSDK->retrieveContactModel(); // Helper Method
+echo '<pre>';
+print_r($result);
+echo '</pre>';
+
+/**
+ * List Contacts
+ */
+$params = array(
+    'filter' => 'email==dev@domain.tld',
+    'order_by' => 'id desc',
+    'page_size' => 5,
+    'optional_properties' => 'email_addresses,custom_fields,tag_ids',
+);
+$result = $gKSDK->listContacts($params);
+echo '<pre>';
+print_r($result);
+echo '</pre>';
+
+/**
+ * Create Contact
+ */
+$payload = array(
+    'given_name' => 'Dee',
+    'family_name' => 'Veloper',
+    'job_title' => 'Developer',
+    'email_addresses' => array(
+        (object) array(
+            'email' => 'dev@domain.tld',
+            'field' => 'EMAIL1',
+            'opt_in_reason' => 'Convincing opt in reason goes here'
+        ),
+    ),
+);
+$result = $gKSDK->createContact(json_encode($payload));
+echo '<pre>';
+print_r($result);
+echo '</pre>';
+
+/**
+ * List Resthook Events
+ */
+$result = $gKSDK->resthookEvents();
+echo '<pre>';
+print_r($result);
+echo '</pre>';
+
+/**
+ * Create a RESTHook subscription
+ * If this code is executed from the hookURL, it will autoverify itself.
+ */
+$payload = (object) array(
+            'eventKey' => 'order.add',
+            'hookUrl' => 'https://domain.tld/path/to/hook/listener}',
+);
+$result = $gKSDK->createRestHook(json_encode($payload));
 ```
 
 ---
