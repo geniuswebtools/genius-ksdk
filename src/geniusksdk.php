@@ -133,6 +133,24 @@ class GeniusKSDK {
     }
 
     /**
+     * Email
+     * https://developer.infusionsoft.com/docs/restv2/#tag/Email
+     */
+
+    /**
+     * Email Address
+     * https://developer.infusionsoft.com/docs/restv2/#tag/Email-Address
+     * 
+     * Retrieve an Email Address status
+     * 
+     * @param string $email
+     * @return stdClass Object
+     */
+    public function emailStatus(string $email) {
+        return $this->request('/v2/emailAddresses/' . $email);
+    }
+
+    /**
      * REST Hooks
      * https://developer.infusionsoft.com/docs/rest/#tag/REST-Hooks
      * 
