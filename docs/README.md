@@ -1,5 +1,6 @@
 > [!IMPORTANT]
-> This library is not associated or maintained by Keap, and is an independent project.
+> This library is not associated or maintained by Keap, and is an independent 
+> project. Please do not contact Keap for support.
 
 # Genius KSDK
 This library is designed to work with the Keap REST API using a Personal Access 
