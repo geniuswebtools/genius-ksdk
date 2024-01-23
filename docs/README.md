@@ -3,8 +3,7 @@
 > project. Please do not contact Keap for support.
 
 # Genius KSDK
-This library is designed to work with the Keap REST API using a Personal Access 
-Token or a Service Account Key.
+This library is designed to work with the Keap REST API using a [Personal Access Token or a Service Account Key.](https://developer.infusionsoft.com/pat-and-sak/)
 
 The library is **not** designed to work with the OAuth2 Authentication.
 
@@ -12,8 +11,8 @@ _Testing proves that this authentication method can also use a Legacy API Key,
 but it would be better to use a Service Account Key instead._
 
 ## Why use Genius KSDK?
-This library makes requests to the Keap REST API by using a 
-[Personal Access Token or a Service Account Key.](https://developer.infusionsoft.com/pat-and-sak/)  Using one of these two keys means you don't have to 
+This library makes requests to the Keap REST API by using a Personal Access Token 
+or a Service Account Key.  Using one of these two keys means you don't have to 
 create a Keap Developer account, and use the OAuth2 authentication implementation.
 
 Here's a quick list of the benefits for using this library to access the Keap
