@@ -105,7 +105,7 @@ echo '</pre>';
 
 /**
  * Create a RESTHook subscription
- * This code is intended to be executed from the hookURL, automatically 
+ * This code is intended to be executed from the hookURL, to automatically 
  * verify itself.
  */
 $payload = (object) array(
