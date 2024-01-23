@@ -72,7 +72,7 @@ class GeniusKSDK {
     public function createContact(string $payload) {
         return $this->request('/v2/contacts', array(
                     'method' => 'POST',
-                    'header' => 'Content-Type: application/json',
+                    'header' => array('Content-Type: application/json'),
                     'content' => $payload,
         ));
     }
@@ -112,7 +112,7 @@ class GeniusKSDK {
     public function updateContact(int $id, string $payload) {
         return $this->request('/v2/contacts/' . $id, array(
                     'method' => 'PATCH',
-                    'header' => 'Content-Type: application/json',
+                    'header' => array('Content-Type: application/json'),
                     'content' => $payload,
         ));
     }
@@ -148,6 +148,88 @@ class GeniusKSDK {
      */
     public function emailStatus(string $email) {
         return $this->request('/v2/emailAddresses/' . $email);
+    }
+
+    /**
+     * Tags
+     * https://developer.infusionsoft.com/docs/restv2/#tag/Tags
+     */
+
+    /**
+     * List Tags
+     * https://developer.infusionsoft.com/docs/restv2/#tag/Settings/operation/getContactOptionTypesUsingGET_1
+     * 
+     * Retrieve a list of tags defined in the application. To search for null or empty fields use filter==NONE
+     * 
+     * @param array $params
+     * @return stdClass Object
+     */
+    public function listTags(array $params = null) {
+        $httpQuery = (($params !== null) ? '?' . http_build_query((array) $params, '', '&', PHP_QUERY_RFC3986) : '');
+        return $this->request('/v2/tags' . $httpQuery);
+    }
+
+    /**
+     * Create Tag
+     * https://developer.infusionsoft.com/docs/restv2/#tag/Tags/operation/createTagUsingPOST_1
+     * 
+     * Create a new tag
+     * 
+     * @param string $payload
+     * @return stdClass Object
+     */
+    public function createTag(string $payload) {
+        return $this->request('/v2/tags', array(
+                    'method' => 'POST',
+                    'header' => array('Content-Type: application/json'),
+                    'content' => $payload,
+        ));
+    }
+
+    /**
+     * Retrieve a Tag
+     * https://developer.infusionsoft.com/docs/restv2/#tag/Tags/operation/getTagUsingGET_1
+     * 
+     * Returns the tag with the specified tagId
+     * 
+     * @param int $id
+     * @return stdClass Object
+     */
+    public function getTag(int $id) {
+        return $this->request('/v2/tags/' . $id);
+    }
+
+    /**
+     * Update a Tag
+     * https://developer.infusionsoft.com/docs/restv2/#tag/Tags/operation/patchTagUsingPATCH
+     * 
+     * Updates a tag with only the values provided in the request
+     * 
+     * @param int $id
+     * @param string $payload
+     * @return stdClass Object
+     */
+    public function updateTag(int $id, string $payload) {
+        return $this->request('/v2/tags/' . $id, array(
+                    'method' => 'PATCH',
+                    'header' => array('Content-Type: application/json'),
+                    'content' => $payload,
+        ));
+    }
+
+    /**
+     * Delete Tag
+     * https://developer.infusionsoft.com/docs/restv2/#tag/Tags/operation/deleteTagUsingDELETE
+     * 
+     * Delete Tag by tag id
+     * 
+     * @param int $id
+     * @return stdClass Object
+     */
+    public function deleteTag(int $id) {
+        return $this->request('/v2/tags/' . $id, array(
+                    'method' => 'DELETE',
+        ));
     }
 
     /**
@@ -198,7 +280,7 @@ class GeniusKSDK {
         }
         return $this->request('/v1/hooks', array(
                     'method' => 'POST',
-                    'header' => 'Content-Type: application/json',
+                    'header' => array('Content-Type: application/json'),
                     'content' => $payload,
         ));
     }
