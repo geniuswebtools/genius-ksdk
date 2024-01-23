@@ -1,9 +1,26 @@
 <?php
 
 /**
+ * Genius KSDK Library
+ * 
+ * IMPORTANT! This library is not associated or maintained by Keap, and is an 
+ * independent project. Please do not contact Keap for support.
+ * 
+ * * This library currently supports the Keap REST API V1 and V2 endpoints.
+ * * This library DOES NOT use the OAuth2 authentication method.
+ * * This library makes requests to the Keap REST API by using a Personal Access 
+ *   Token or a Service Account Key.  
+ * 
+ * See the README file for more information.
+ * 
+ * @author  Marion Dorsett <marion.dorsett@gmail.com>
+ * @copyright (c) 2024 Marion Dorsett
+ * @license MIT
+ * @version 1.0
  * 
  * Keap Developer Guide
  * https://developer.infusionsoft.com/developer-guide/
+ * 
  */
 class GeniusKSDK {
 
@@ -27,7 +44,7 @@ class GeniusKSDK {
     }
 
     /**
-     * Contact
+     * Contact Helper Methods
      * https://developer.infusionsoft.com/docs/rest/#tag/Contact
      * 
      */
@@ -41,7 +58,7 @@ class GeniusKSDK {
      * @return stdClass Object
      */
     public function retrieveContactModel() {
-        return $this->request('/v2/contacts/model');
+        return $this->read('/v2/contacts/model');
     }
 
     /**
@@ -54,9 +71,9 @@ class GeniusKSDK {
      * @param string $params
      * @return stdClass Object
      */
-    public function findContacts(array $params = null) {
+    public function listContacts(array $params = null) {
         $httpQuery = (($params !== null) ? '?' . http_build_query((array) $params, '', '&', PHP_QUERY_RFC3986) : '');
-        return $this->request('/v2/contacts' . $httpQuery);
+        return $this->read('/v2/contacts' . $httpQuery);
     }
 
     /**
@@ -70,11 +87,7 @@ class GeniusKSDK {
      * @return stdClass Object
      */
     public function createContact(string $payload) {
-        return $this->request('/v2/contacts', array(
-                    'method' => 'POST',
-                    'header' => array('Content-Type: application/json'),
-                    'content' => $payload,
-        ));
+        return $this->create('/v2/contacts', $payload);
     }
 
     /**
@@ -98,7 +111,7 @@ class GeniusKSDK {
         if (!empty($fields)) {
             $endpoint .= '?fields=' . $fields;
         }
-        return $this->request($endpoint);
+        return $this->read($endpoint);
     }
 
     /**
@@ -110,11 +123,7 @@ class GeniusKSDK {
      * @return stdClass Object
      */
     public function updateContact(int $id, string $payload) {
-        return $this->request('/v2/contacts/' . $id, array(
-                    'method' => 'PATCH',
-                    'header' => array('Content-Type: application/json'),
-                    'content' => $payload,
-        ));
+        return $this->update('/v2/contacts/' . $id, $payload);
     }
 
     /**
@@ -127,9 +136,7 @@ class GeniusKSDK {
      * @return stdClass Object
      */
     public function deleteContact(int $id) {
-        return $this->request('/v2/contacts/' . $id, array(
-                    'method' => 'DELETE',
-        ));
+        return $this->delete('/v2/contacts/' . $id);
     }
 
     /**
@@ -147,7 +154,7 @@ class GeniusKSDK {
      * @return stdClass Object
      */
     public function emailStatus(string $email) {
-        return $this->request('/v2/emailAddresses/' . $email);
+        return $this->read('/v2/emailAddresses/' . $email);
     }
 
     /**
@@ -166,7 +173,7 @@ class GeniusKSDK {
      */
     public function listTags(array $params = null) {
         $httpQuery = (($params !== null) ? '?' . http_build_query((array) $params, '', '&', PHP_QUERY_RFC3986) : '');
-        return $this->request('/v2/tags' . $httpQuery);
+        return $this->read('/v2/tags' . $httpQuery);
     }
 
     /**
@@ -179,11 +186,7 @@ class GeniusKSDK {
      * @return stdClass Object
      */
     public function createTag(string $payload) {
-        return $this->request('/v2/tags', array(
-                    'method' => 'POST',
-                    'header' => array('Content-Type: application/json'),
-                    'content' => $payload,
-        ));
+        return $this->create('/v2/tags', $payload);
     }
 
     /**
@@ -196,7 +199,7 @@ class GeniusKSDK {
      * @return stdClass Object
      */
     public function getTag(int $id) {
-        return $this->request('/v2/tags/' . $id);
+        return $this->read('/v2/tags/' . $id);
     }
 
     /**
@@ -210,11 +213,7 @@ class GeniusKSDK {
      * @return stdClass Object
      */
     public function updateTag(int $id, string $payload) {
-        return $this->request('/v2/tags/' . $id, array(
-                    'method' => 'PATCH',
-                    'header' => array('Content-Type: application/json'),
-                    'content' => $payload,
-        ));
+        return $this->update('/v2/tags/' . $id, $payload);
     }
 
     /**
@@ -227,9 +226,7 @@ class GeniusKSDK {
      * @return stdClass Object
      */
     public function deleteTag(int $id) {
-        return $this->request('/v2/tags/' . $id, array(
-                    'method' => 'DELETE',
-        ));
+        return $this->request('/v2/tags/' . $id);
     }
 
     /**
@@ -246,7 +243,7 @@ class GeniusKSDK {
      * @return stdClass Object
      */
     public function resthookEvents() {
-        return $this->request('/v1/hooks/event_keys');
+        return $this->read('/v1/hooks/event_keys');
     }
 
     /**
@@ -257,7 +254,7 @@ class GeniusKSDK {
      * @return stdClass Object
      */
     public function resthooks() {
-        return $this->request('/v1/hooks');
+        return $this->read('/v1/hooks');
     }
 
     /**
@@ -278,11 +275,7 @@ class GeniusKSDK {
         if ($verify === true) {
             $this->verifyRestHook();
         }
-        return $this->request('/v1/hooks', array(
-                    'method' => 'POST',
-                    'header' => array('Content-Type: application/json'),
-                    'content' => $payload,
-        ));
+        return $this->create('/v1/hooks', $payload);
     }
 
     /**
@@ -298,7 +291,7 @@ class GeniusKSDK {
      * @return stdClass Object
      */
     public function getRestHook(int $key) {
-        return $this->request('/v1/hooks/' . $key);
+        return $this->read('/v1/hooks/' . $key);
     }
 
     /**
@@ -311,9 +304,7 @@ class GeniusKSDK {
      * @return stdClass Object
      */
     public function deleteRestHook(int $key) {
-        return $this->request('/v1/hooks/' . $key, array(
-                    'method' => 'DELETE',
-        ));
+        return $this->delete('/v1/hooks/' . $key);
     }
 
     /**
@@ -333,6 +324,67 @@ class GeniusKSDK {
         header('X-Hook-Secret: ' . $XHookSecret);
         echo $this->requestBody();
         exit;
+    }
+
+    /**
+     * Generic CRUD Methods
+     * 
+     * These methods can be used to make CRUD requests to the Keap REST API when 
+     * helper method isn't provided in this library, or when new endpoints are 
+     * added to the API.
+     * 
+     */
+
+    /**
+     * Create an object
+     * 
+     * @param string $path
+     * @param string $payload
+     * @return stdClass Object
+     */
+    public function create(string $path, string $payload) {
+        return $this->request($path, array(
+                    'method' => 'POST',
+                    'header' => array('Content-Type: application/json'),
+                    'content' => $payload,
+        ));
+    }
+
+    /**
+     * Read an object or Retrieve a list of objects
+     * 
+     * @param string $path
+     * @return stdClass Object
+     */
+    public function read(string $path) {
+        return $this->request($path);
+    }
+
+    /**
+     * Update an object
+     * 
+     * @param string $path
+     * @param string $payload
+     * @return stdClass Object
+     */
+    public function update(string $path, string $payload) {
+        return $this->request($path, array(
+                    'method' => 'PATCH',
+                    'header' => array('Content-Type: application/json'),
+                    'content' => $payload,
+        ));
+    }
+
+    /**
+     * Delete an object
+     * 
+     * @param string $path
+     * @return stdClass Object
+     */
+    public function delete(string $path) {
+        return $this->request($path, array(
+                    'method' => 'DELETE',
+        ));
     }
 
     /**
@@ -457,7 +509,9 @@ class GeniusKSDK {
      * https://www.php.net/manual/en/function.apache-request-headers.php#70810
      * 
      * If the apache_request_headers() function doesn't exist, use this function
-     * which mimics apache_request_headers() instead. - limalopex.eisfux.de
+     * which mimics apache_request_headers() instead.
+     * 
+     * @author limalopex.eisfux.de
      */
     private function buildRequestHeadersFromServer() {
         $arh = array();
