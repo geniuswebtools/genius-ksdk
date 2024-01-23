@@ -105,7 +105,8 @@ echo '</pre>';
 
 /**
  * Create a RESTHook subscription
- * If this code is executed from the hookURL, it will autoverify itself.
+ * This code is intended to be executed from the hookURL, automatically 
+ * verify itself.
  */
 $payload = (object) array(
             'eventKey' => 'order.add',
