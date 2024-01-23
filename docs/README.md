@@ -112,6 +112,9 @@ $payload = (object) array(
             'hookUrl' => 'https://domain.tld/path/to/hook/listener}',
 );
 $result = $gKSDK->createRestHook(json_encode($payload));
+echo '<pre>';
+print_r($result);
+echo '</pre>';
 ```
 
 ---
