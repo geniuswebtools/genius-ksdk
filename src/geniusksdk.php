@@ -145,13 +145,23 @@ class GeniusKSDK {
      * 
      * Apply Tag to a list of contact records
      * 
+     * @param int $tagId
+     * @param array $contactIds
+     * @return stdClass Object
      */
     public function applyTagToContacts(int $tagId, array $contactIds) {
         return $this->tagEditBulkContacts('applyTags', $tagId, $contactIds);
     }
 
     /**
+     * Remove Tags
+     * https://developer.infusionsoft.com/docs/restv2/#tag/Tags/operation/removeTagsUsingPOST
      * 
+     * Remove a Tag from a list of contact records
+     * 
+     * @param int $tagId
+     * @param array $contactIds
+     * @return stdClass Object
      */
     public function removeTagFromContacts(int $tagId, array $contactIds) {
         return $this->tagEditBulkContacts('removeTags', $tagId, $contactIds);
