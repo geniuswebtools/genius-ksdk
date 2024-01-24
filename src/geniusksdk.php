@@ -287,17 +287,57 @@ class GeniusKSDK {
     }
 
     /**
-     * @todo Create Tag Category
+     * Create Tag Category
+     * https://developer.infusionsoft.com/docs/restv2/#tag/Tags/operation/createTagCategoryUsingPOST_1
+     * 
+     * Create a new tag category
+     * 
+     * @param string $payload
+     * @return stdClass Object
      */
+    public function createTagCategory(string $payload) {
+        return $this->create('/v2/tags/categories', $payload);
+    }
+
     /**
-     * @todo Retrieve a Tag Category
+     * Retrieve a Tag Category
+     * https://developer.infusionsoft.com/docs/restv2/#tag/Tags/operation/getCategoryUsingGET
+     * 
+     * Returns the tag category with the specified category_id
+     * 
+     * @param int $id
+     * @return stdClass Object
      */
+    public function getTagCategory(int $id) {
+        return $this->read('/v2/tags/categories/' . $id);
+    }
+
     /**
-     * @todo Delete Tag Category
+     * Delete Tag Category
+     * https://developer.infusionsoft.com/docs/restv2/#tag/Tags/operation/deleteTagCategoryUsingDELETE
+     * 
+     * Deletes the specified Tag Category
+     * 
+     * @param int $id
+     * @return stdClass Object
      */
+    public function deleteTagCategory(int $id) {
+        return $this->delete('/v2/tags/categories/' . $id);
+    }
+
     /**
-     * @todo Update a Tag Category
+     * Update a Tag Category
+     * https://developer.infusionsoft.com/docs/restv2/#tag/Tags/operation/patchTagCategoryUsingPATCH
+     * 
+     * Updates a tag category with only the values provided in the request
+     * 
+     * @param int $id
+     * @param string $payload
+     * @return stdClass Object
      */
+    public function updateTagCategory(int $id, string $payload) {
+        return $this->update('/v2/tags/categories/' . $id, $payload);
+    }
 
     /**
      * List Tagged Companies 
@@ -306,6 +346,9 @@ class GeniusKSDK {
      * Retrieves a list of companies that have the given tag applied To search 
      * for null or empty fields use filter==NONE
      * 
+     * @param int $tagId
+     * @param array $params
+     * @return stdClass Object
      */
     public function listTaggedCompanies(int $tagId, array $params = null) {
         $httpQuery = $this->buildHTTPQuery($params);
