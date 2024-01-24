@@ -207,7 +207,8 @@ class GeniusKSDK {
      * List Tags
      * https://developer.infusionsoft.com/docs/restv2/#tag/Settings/operation/getContactOptionTypesUsingGET_1
      * 
-     * Retrieve a list of tags defined in the application. To search for null or empty fields use filter==NONE
+     * Retrieve a list of tags defined in the application. To search for null or 
+     * empty fields use filter==NONE
      * 
      * @param array $params
      * @return stdClass Object
@@ -273,6 +274,12 @@ class GeniusKSDK {
     /**
      * List Tag Categories
      * https://developer.infusionsoft.com/docs/restv2/#tag/Tags/operation/listTagCategoriesUsingGET
+     * 
+     * Retrieve a list of tag categories defined in the application To search 
+     * for null or empty fields use filter==NONE
+     * 
+     * @param array $params
+     * @return stdClass Object
      */
     public function listTagCategories(array $params = null) {
         $httpQuery = $this->buildHTTPQuery($params);
@@ -291,10 +298,20 @@ class GeniusKSDK {
     /**
      * @todo Update a Tag Category
      */
+
     /**
-     * @todo List Tagged Companies 
+     * List Tagged Companies 
+     * https://developer.infusionsoft.com/docs/restv2/#tag/Tags/operation/listCompaniesForTagIdUsingGET_1
+     * 
+     * Retrieves a list of companies that have the given tag applied To search 
+     * for null or empty fields use filter==NONE
      * 
      */
+    public function listTaggedCompanies(int $tagId, array $params = null) {
+        $httpQuery = $this->buildHTTPQuery($params);
+        return $this->read('/v2/tags/' . $tagId . '/companies' . $httpQuery);
+    }
+
     /**
      * REST Hooks
      * https://developer.infusionsoft.com/docs/rest/#tag/REST-Hooks
