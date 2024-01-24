@@ -72,7 +72,7 @@ class GeniusKSDK {
      * @return stdClass Object
      */
     public function listContacts(array $params = null) {
-        $httpQuery = (($params !== null) ? '?' . http_build_query((array) $params, '', '&', PHP_QUERY_RFC3986) : '');
+        $httpQuery = $this->buildHTTPQuery($params);
         return $this->read('/v2/contacts' . $httpQuery);
     }
 
@@ -106,11 +106,9 @@ class GeniusKSDK {
      * @param string $fields
      * @return stdClass Object 
      */
-    public function getContact(int $id, string $fields = '') {
-        $endpoint = '/v2/contacts/' . $id;
-        if (!empty($fields)) {
-            $endpoint .= '?fields=' . $fields;
-        }
+    public function getContact(int $id, array $params = null) {
+        $httpQuery = $this->buildHTTPQuery($params);
+        $endpoint = '/v2/contacts/' . $id . $httpQuery;
         return $this->read($endpoint);
     }
 
@@ -150,8 +148,8 @@ class GeniusKSDK {
      * @return stdClass Object
      */
     public function listContacsWithTag(int $tagId, array $params = null) {
-        $httpQuery = (($params !== null) ? '?' . http_build_query((array) $params, '', '&', PHP_QUERY_RFC3986) : '');
-        return $this->read('/v2/tags/' . $tagId . '/contacts' . $httpQuery, $contactIds);
+        $httpQuery = $this->buildHTTPQuery($params);
+        return $this->read('/v2/tags/' . $tagId . '/contacts' . $httpQuery);
     }
 
     /**
@@ -215,7 +213,7 @@ class GeniusKSDK {
      * @return stdClass Object
      */
     public function listTags(array $params = null) {
-        $httpQuery = (($params !== null) ? '?' . http_build_query((array) $params, '', '&', PHP_QUERY_RFC3986) : '');
+        $httpQuery = $this->buildHTTPQuery($params);
         return $this->read('/v2/tags' . $httpQuery);
     }
 
@@ -272,6 +270,31 @@ class GeniusKSDK {
         return $this->request('/v2/tags/' . $id);
     }
 
+    /**
+     * List Tag Categories
+     * https://developer.infusionsoft.com/docs/restv2/#tag/Tags/operation/listTagCategoriesUsingGET
+     */
+    public function listTagCategories(array $params = null) {
+        $httpQuery = $this->buildHTTPQuery($params);
+        return $this->read('/v2/tags/categories' . $httpQuery);
+    }
+
+    /**
+     * @todo Create Tag Category
+     */
+    /**
+     * @todo Retrieve a Tag Category
+     */
+    /**
+     * @todo Delete Tag Category
+     */
+    /**
+     * @todo Update a Tag Category
+     */
+    /**
+     * @todo List Tagged Companies 
+     * 
+     */
     /**
      * REST Hooks
      * https://developer.infusionsoft.com/docs/rest/#tag/REST-Hooks
@@ -488,6 +511,10 @@ class GeniusKSDK {
     protected function restruct(array $default, array $struct = null) {
         $reStruct = array_merge($default, (array) $struct);
         return (array) array_intersect_key($reStruct, $default);
+    }
+
+    protected function buildHTTPQuery(array $params = null) {
+        return (($params !== null) ? '?' . http_build_query((array) $params, '', '&', PHP_QUERY_RFC3986) : '');
     }
 
     private function httpHeader(array $struct) {
