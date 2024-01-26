@@ -22,11 +22,7 @@ REST API.
 - Does **NOT** require OAuth2 authentication
 - Does **NOT** require Composer
 - **CAN** be used with a single access key
-
-## Why not use Genius KSDK?
-Rarly is any thing perfect, and this code is no exception.
-
-- Does **NOT** work with the Legacy XML-RPC API
+- **CAN** be use the Legacy XML-RPC API
 
 ## Usage
 Load the library into your PHP code.  The lirary contains generic CRUD methods

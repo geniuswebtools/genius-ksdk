@@ -16,7 +16,7 @@
  * @author  Marion Dorsett <marion.dorsett@gmail.com>
  * @copyright (c) 2024 Marion Dorsett
  * @license MIT
- * @version 1.0
+ * @version 1.1
  * 
  * Keap Developer Guide
  * https://developer.infusionsoft.com/developer-guide/
@@ -25,14 +25,19 @@
 class GeniusKSDK {
 
     /**
-     * @var string $apiKey Expects a Personal Access Token or a Service Account Key.
+     * Expects a Personal Access Token or a Service Account Key.
      * https://developer.infusionsoft.com/pat-and-sak/
+     * 
+     * @var string $apiKey 
      */
     private $apiKey,
+            $api = 'rest',
             /**
              * @var string $endpointPrefix
              */
-            $endpointPrefix = 'https://api.infusionsoft.com/crm/rest';
+            $baseURI = 'https://api.infusionsoft.com/crm',
+            $restURI = '/rest',
+            $xmlURI = '/xmlrpc/v1';
 
     public function __construct(array $struct) {
         $this->init($struct);
@@ -41,6 +46,11 @@ class GeniusKSDK {
         } catch (\Exception $ex) {
             throw new \Exception($ex->getMessage());
         }
+    }
+
+    public function api($type = 'rest') {
+        $this->api = (($type !== 'rest') ? 'xml' : 'rest');
+        return $this;
     }
 
     /**
@@ -689,6 +699,8 @@ class GeniusKSDK {
             CURLOPT_VERBOSE => 1,
             CURLOPT_HEADER => 1,
             CURLOPT_ENCODING => '',
+            CURLOPT_SSL_VERIFYPEER => true,
+            CURLOPT_CAPATH => __DIR__ . '/cainfusionsoft.pem',
         );
         if (!empty($content)) {
             $curlOpts[CURLOPT_POSTFIELDS] = $content;
@@ -706,6 +718,7 @@ class GeniusKSDK {
         $responseBody = $this->httpBody(substr($response, $headerSize), $responsHeader);
         return (object) array(
                     'engine' => 'cURL',
+                    'api' => $this->api,
                     'method' => $method,
                     'error' => ((isset($error)) ? $error : false),
                     'header' => $responsHeader,
@@ -714,7 +727,8 @@ class GeniusKSDK {
     }
 
     protected function endpoint($uri) {
-        return ((preg_match('/^https/', $uri)) ? $uri : str_replace('//', '/', $this->endpointPrefix . $uri));
+        $endpoint = $this->baseURI . (($this->api !== 'rest') ? $this->xmlURI : $this->restURI . $uri);
+        return ((preg_match('/^https/', $uri)) ? $uri : str_replace('//', '/', $endpoint));
     }
 
     protected function restruct(array $default, array $struct = null) {
@@ -770,6 +784,7 @@ class GeniusKSDK {
     private function defaultStruct() {
         return array(
             'apiKey' => '',
+            'api' => 'rest',
         );
     }
 
