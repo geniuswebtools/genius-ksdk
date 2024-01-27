@@ -18,19 +18,16 @@ create a Keap Developer account, and use the OAuth2 authentication implementatio
 Here's a quick list of the benefits for using this library to access the Keap
 REST API.
 
-- Does **NOT** require creating a Keap developer app
-- Does **NOT** require OAuth2 authentication
-- Does **NOT** require Composer
+- **SUPPORTS** the REST API
+- **SUPPORTS** the XML-RPC API (Legacy)
 - **CAN** be used with a single access key
-- **CAN** be use the Legacy XML-RPC API
+- Does **NOT** require a Keap developer app
+- Does **NOT** support OAuth2 authentication
+- Does **NOT** support Composer
 
 ## Usage
-Load the library into your PHP code.  The lirary contains generic CRUD methods
-that can be used to make requests to most of the Keap API.
-- create()
-- read()
-- update()
-- detele()
+Load the library into your PHP code.  The built in autoloader will handle loading 
+any additional classes and traits.
 
 ```php
 require_once '/src/genius-ksdk.php';
@@ -43,15 +40,12 @@ try {
 }
 
 /**
- * Retrieve a Contact Model using read() or the provided retrieveContactModel() 
- * helper mehod.
+ * Retrieve a Contact Model with the REST or XML APIs... you can also use the 
+ * the REST API with generic read() method.
  */
-$result = $gKSDK->read('/v2/contacts/model'); // Generic Method
-echo '<pre>';
-print_r($result);
-echo '</pre>';
-
-$result = $gKSDK->retrieveContactModel(); // Helper Method
+$result = $gKSDK->contact('xml')->model();
+$result = $gKSDK->contact()->model();
+$result = $gKSDK->read('/v2/contacts/model'); // Generic REST Method
 echo '<pre>';
 print_r($result);
 echo '</pre>';
@@ -59,13 +53,22 @@ echo '</pre>';
 /**
  * List Contacts
  */
-$params = array(
+$xmlFilter = array(
+    'queryData' => array('Email' => '%@domain.tld'),
+    'selectedFields' => array('Id', 'Email'),
+    'orderBy' => 'Email',
+    'ascending' => false,
+);
+$restFilter = array(
     'filter' => 'email==dev@domain.tld',
     'order_by' => 'id desc',
     'page_size' => 5,
     'optional_properties' => 'email_addresses,custom_fields,tag_ids',
 );
-$result = $gKSDK->listContacts($params);
+$result = $gKSDK->contact('xml')->list();
+$result = $gKSDK->contact('xml')->list($xmlFilter);
+$result = $gKSDK->contact()->list();
+$result = $gKSDK->contact()->list($restFilter); 
 echo '<pre>';
 print_r($result);
 echo '</pre>';
@@ -73,19 +76,26 @@ echo '</pre>';
 /**
  * Create Contact
  */
-$payload = array(
+$xmlFields = array(
+    'FirstName' => 'Dee',
+    'LastName' => 'Veloper',
+    'Email' => 'dev@domain.tld',
+);
+$restFields = array(
     'given_name' => 'Dee',
     'family_name' => 'Veloper',
     'job_title' => 'Developer',
     'email_addresses' => array(
-        (object) array(
+        array(
             'email' => 'dev@domain.tld',
             'field' => 'EMAIL1',
             'opt_in_reason' => 'Convincing opt in reason goes here'
         ),
     ),
 );
-$result = $gKSDK->createContact(json_encode($payload));
+$result = $gKSDK->contact('xml')->create($xmlFields); // Add
+$result = $gKSDK->contact('xml')->create($xmlFields, 'Email'); // Dupcheck on contact email
+$result = $gKSDK->contact()->create($restFields); //  Will add. Does not support dupCheck
 echo '<pre>';
 print_r($result);
 echo '</pre>';

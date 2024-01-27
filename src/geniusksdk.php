@@ -1,6 +1,11 @@
 <?php
 
 /**
+ * MUST register the autoloader first, so it CAN autoload Traits.
+ */
+spl_autoload_register('geniusksdk_autoloader');
+
+/**
  * Genius KSDK Library
  * 
  * IMPORTANT! This library is not associated or maintained by Keap, and is an 
@@ -16,7 +21,7 @@
  * @author  Marion Dorsett <marion.dorsett@gmail.com>
  * @copyright (c) 2024 Marion Dorsett
  * @license MIT
- * @version 1.1
+ * @version 1.2
  * 
  * Keap Developer Guide
  * https://developer.infusionsoft.com/developer-guide/
@@ -24,20 +29,20 @@
  */
 class GeniusKSDK {
 
+    use \GeniusKSDK\Quirk;
+
+    public $restURI = 'https://api.infusionsoft.com/crm/rest',
+            $xmlURL = 'https://api.infusionsoft.com/crm/xmlrpc/v1';
+
     /**
      * Expects a Personal Access Token or a Service Account Key.
      * https://developer.infusionsoft.com/pat-and-sak/
      * 
      * @var string $apiKey 
      */
-    private $apiKey,
-            $api = 'rest',
-            /**
-             * @var string $endpointPrefix
-             */
-            $baseURI = 'https://api.infusionsoft.com/crm',
-            $restURI = '/rest',
-            $xmlURI = '/xmlrpc/v1';
+    private $model,
+            $apiKey,
+            $api = 'rest';
 
     public function __construct(array $struct) {
         $this->init($struct);
@@ -48,9 +53,68 @@ class GeniusKSDK {
         }
     }
 
-    public function api($type = 'rest') {
-        $this->api = (($type !== 'rest') ? 'xml' : 'rest');
+    public function api(string $type = null) {
+        if ($type !== null) {
+            $this->api = (($type !== 'rest') ? 'xml' : 'rest');
+        }
         return $this;
+    }
+
+    public function apiKey() {
+        return $this->apiKey;
+    }
+
+    public function endpoint(string $uri = '') {
+        $endpoint = (($this->api !== 'rest') ? $this->xmlURL : $this->restURI . $uri);
+        return ((preg_match('/^https/', $uri)) ? $uri : str_replace('//', '/', $endpoint));
+    }
+
+    /**
+     * @param string $endpoint
+     * @param array $struct
+     * @return stdClass Object
+     */
+    public function request(string $endpoint, array $struct = null) {
+        $options = $this->restruct($this->defaultOptions(), $struct);
+        $method = $options['method'];
+        $header = array_merge((array) $options['header'], array('X-Keap-API-Key: ' . $this->apiKey));
+        $content = $options['content'];
+        $curlOpts = array(
+            CURLOPT_URL => $this->endpoint($endpoint),
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_MAXREDIRS => 3,
+            CURLOPT_TIMEOUT => 1,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => $method,
+            CURLOPT_HTTPHEADER => $header,
+            CURLOPT_VERBOSE => 1,
+            CURLOPT_HEADER => 1,
+            CURLOPT_ENCODING => '',
+            CURLOPT_SSL_VERIFYPEER => true,
+            CURLOPT_CAPATH => __DIR__ . '/cainfusionsoft.pem',
+        );
+        if (!empty($content)) {
+            $curlOpts[CURLOPT_POSTFIELDS] = $content;
+        }
+        $curl = curl_init();
+        curl_setopt_array($curl, $curlOpts);
+        $response = curl_exec($curl);
+        if (curl_error($curl)) {
+            $error = curl_error($curl);
+        }
+        $headerSize = curl_getinfo($curl, CURLINFO_HEADER_SIZE);
+        curl_close($curl);
+        $responsHeader = $this->httpHeader(array_map('trim', (array) explode("\r", trim(substr($response, 0, $headerSize)))));
+        $responseBody = $this->httpBody(substr($response, $headerSize), $responsHeader);
+        return (object) array(
+                    'engine' => 'cURL',
+                    'api' => $this->api,
+                    'method' => $method,
+                    'error' => ((isset($error)) ? $error : false),
+                    'header' => $responsHeader,
+                    'content' => $responseBody,
+        );
     }
 
     /**
@@ -58,93 +122,13 @@ class GeniusKSDK {
      * https://developer.infusionsoft.com/docs/rest/#tag/Contact
      * 
      */
-
-    /**
-     * Retrieve Contact Model 
-     * https://developer.infusionsoft.com/docs/restv2/#tag/Contact/operation/retrieveContactModelUsingGET_1
-     * 
-     * Get the custom fields and optional properties for the Contact object
-     * 
-     * @return stdClass Object
-     */
-    public function retrieveContactModel() {
-        return $this->read('/v2/contacts/model');
-    }
-
-    /**
-     * List Contacts
-     * https://developer.infusionsoft.com/docs/restv2/#tag/Contact/operation/listContactsUsingGET_1
-     * 
-     * Retrieves a list of contacts
-     * https://integration.keap.com/t/rest-v2/85756/3
-     * 
-     * @param string $params
-     * @return stdClass Object
-     */
-    public function listContacts(array $params = null) {
-        $httpQuery = $this->buildHTTPQuery($params);
-        return $this->read('/v2/contacts' . $httpQuery);
-    }
-
-    /**
-     * Create a Contact
-     * https://developer.infusionsoft.com/docs/restv2/#tag/Contact/operation/createContactUsingPOST_1
-     * 
-     * Note: Contact must contain at least one item in email_addresses or 
-     * phone_numbers and country_code is required if region is specified.
-     * 
-     * @param string $payload
-     * @return stdClass Object
-     */
-    public function createContact(string $payload) {
-        return $this->create('/v2/contacts', $payload);
-    }
-
-    /**
-     * Retrieve a Contact
-     * https://developer.keap.com/docs/restv2/#tag/Contact/operation/getContactUsingGET_1
-     * 
-     * $fields = Comma-delimited list of Contact properties to include in the response. 
-     * Available fields are: 
-     *  score_value, addresses, anniversary, birthday, company, contact_type, 
-     *  custom_fields, create_time, email_addresses, fax_numbers, job_title, 
-     *  update_date, leadsource_id, middle_name, origin, owner_id, phone_numbers, 
-     *  preferred_locale, preferred_name,prefix, relationships, social_accounts, 
-     *  source_type, spouse_name, suffix, time_zone,website, tag_ids, utm_parameters
-     * 
-     * @param int $id
-     * @param string $fields
-     * @return stdClass Object 
-     */
-    public function getContact(int $id, array $params = null) {
-        $httpQuery = $this->buildHTTPQuery($params);
-        $endpoint = '/v2/contacts/' . $id . $httpQuery;
-        return $this->read($endpoint);
-    }
-
-    /**
-     * Update a Contact
-     * https://developer.keap.com/docs/restv2/#tag/Contact/operation/patchContactUsingPATCH
-     * 
-     * @param int $id
-     * @param string $payload
-     * @return stdClass Object
-     */
-    public function updateContact(int $id, string $payload) {
-        return $this->update('/v2/contacts/' . $id, $payload);
-    }
-
-    /**
-     * Delete a Contact
-     * https://developer.infusionsoft.com/docs/restv2/#tag/Contact/operation/deleteContactUsingDELETE_1
-     * 
-     * Deletes the specified contact.
-     * 
-     * @param int $id
-     * @return stdClass Object
-     */
-    public function deleteContact(int $id) {
-        return $this->delete('/v2/contacts/' . $id);
+    public function contact($api = 'rest') {
+        $this->api($api);
+        if (!isset($this->model[$this->api]['contact'])) {
+            $className = '\GeniusKSDK\\' . $this->api . '\Contact';
+            $this->model[$this->api]['contact'] = new $className($this);
+        }
+        return $this->model[$this->api]['contact'];
     }
 
     /**
@@ -612,7 +596,7 @@ class GeniusKSDK {
     }
 
     /**
-     * Generic CRUD Methods
+     * Generic REST CRUD Methods
      * 
      * These methods can be used to make CRUD requests to the Keap REST API when 
      * helper method isn't provided in this library, or when new endpoints are 
@@ -677,69 +661,6 @@ class GeniusKSDK {
         return $this->create('/v2/tags/' . $tagId . '/contacts:' . $context, $payload);
     }
 
-    /**
-     * @param string $endpoint
-     * @param array $struct
-     * @return stdClass Object
-     */
-    protected function request($endpoint, array $struct = null) {
-        $options = $this->restruct($this->defaultOptions(), $struct);
-        $method = $options['method'];
-        $header = array_merge((array) $options['header'], array('X-Keap-API-Key: ' . $this->apiKey));
-        $content = $options['content'];
-        $curlOpts = array(
-            CURLOPT_URL => $this->endpoint($endpoint),
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_MAXREDIRS => 3,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => $method,
-            CURLOPT_HTTPHEADER => $header,
-            CURLOPT_VERBOSE => 1,
-            CURLOPT_HEADER => 1,
-            CURLOPT_ENCODING => '',
-            CURLOPT_SSL_VERIFYPEER => true,
-            CURLOPT_CAPATH => __DIR__ . '/cainfusionsoft.pem',
-        );
-        if (!empty($content)) {
-            $curlOpts[CURLOPT_POSTFIELDS] = $content;
-        }
-
-        $curl = curl_init();
-        curl_setopt_array($curl, $curlOpts);
-        $response = curl_exec($curl);
-        if (curl_error($curl)) {
-            $error = curl_error($curl);
-        }
-        $headerSize = curl_getinfo($curl, CURLINFO_HEADER_SIZE);
-        curl_close($curl);
-        $responsHeader = $this->httpHeader(array_map('trim', (array) explode("\r", trim(substr($response, 0, $headerSize)))));
-        $responseBody = $this->httpBody(substr($response, $headerSize), $responsHeader);
-        return (object) array(
-                    'engine' => 'cURL',
-                    'api' => $this->api,
-                    'method' => $method,
-                    'error' => ((isset($error)) ? $error : false),
-                    'header' => $responsHeader,
-                    'content' => $responseBody,
-        );
-    }
-
-    protected function endpoint($uri) {
-        $endpoint = $this->baseURI . (($this->api !== 'rest') ? $this->xmlURI : $this->restURI . $uri);
-        return ((preg_match('/^https/', $uri)) ? $uri : str_replace('//', '/', $endpoint));
-    }
-
-    protected function restruct(array $default, array $struct = null) {
-        $reStruct = array_merge($default, (array) $struct);
-        return (array) array_intersect_key($reStruct, $default);
-    }
-
-    protected function buildHTTPQuery(array $params = null) {
-        return (($params !== null) ? '?' . http_build_query((array) $params, '', '&', PHP_QUERY_RFC3986) : '');
-    }
-
     private function httpHeader(array $struct) {
         list($protocol, $code) = explode(' ', $struct[0], 2);
         $header = array(
@@ -762,6 +683,9 @@ class GeniusKSDK {
                 return $json;
             }
         }
+        if (preg_match('/text\/xml/', $contentType)) {
+            return xmlrpc_decode($content);
+        }
 
         return $content;
     }
@@ -771,6 +695,8 @@ class GeniusKSDK {
         foreach ((array) $params as $key => $value) {
             $this->{$key} = $value;
         }
+
+        $this->model = array('rest' => array(), 'xml' => array());
     }
 
     private function checkStruct() {
@@ -819,8 +745,8 @@ class GeniusKSDK {
             if (preg_match($rx_http, $key)) {
                 $arh_key = preg_replace($rx_http, '', $key);
                 $rx_matches = array();
-                // do some nasty string manipulations to restore the original letter case
-                // this should work in most cases
+// do some nasty string manipulations to restore the original letter case
+// this should work in most cases
                 $rx_matches = explode('_', $arh_key);
                 if (count($rx_matches) > 0 and strlen($arh_key) > 2) {
                     foreach ($rx_matches as $ak_key => $ak_val)
@@ -836,5 +762,18 @@ class GeniusKSDK {
 
     private function requestBody() {
         return file_get_contents('php://input');
+    }
+}
+
+/**
+ * Lazy load only the classes required for the request.
+ * 
+ * @param string $class
+ * @return null
+ */
+function geniusksdk_autoloader($class) {
+    $calledClass = strtolower($class);
+    if (is_file($file = __DIR__ . '/' . str_replace('\\', DIRECTORY_SEPARATOR, $calledClass) . '.php')) {
+        include_once $file;
     }
 }
