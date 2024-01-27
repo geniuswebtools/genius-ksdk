@@ -131,6 +131,15 @@ class GeniusKSDK {
         return $this->model[$this->api]['contact'];
     }
 
+    public function resthook() {
+        $this->api('rest');
+        if (!isset($this->model[$this->api]['resthook'])) {
+            $className = '\GeniusKSDK\\' . $this->api . '\Resthook';
+            $this->model[$this->api]['resthook'] = new $className($this);
+        }
+        return $this->model[$this->api]['resthook'];
+    }
+
     /**
      * Retrieve a list of contacts with specific tag
      * https://developer.infusionsoft.com/docs/restv2/#tag/Tags/operation/listContactsWithTagIdUsingGET
@@ -503,98 +512,6 @@ class GeniusKSDK {
      * https://developer.infusionsoft.com/docs/rest/#tag/REST-Hooks
      * 
      */
-
-    /**
-     * List Hook Event Types
-     * List the available types of Events that can be listened to
-     * https://developer.infusionsoft.com/docs/rest/#tag/REST-Hooks/operation/list_hook_event_types
-     * 
-     * @return stdClass Object
-     */
-    public function resthookEvents() {
-        return $this->read('/v1/hooks/event_keys');
-    }
-
-    /**
-     * List Stored Hook Subscriptions
-     * Lists your hook subscriptions
-     * https://developer.infusionsoft.com/docs/rest/#tag/REST-Hooks/operation/list_stored_hook_subscriptions
-     * 
-     * @return stdClass Object
-     */
-    public function resthooks() {
-        return $this->read('/v1/hooks');
-    }
-
-    /**
-     * Create a Hook Subscription
-     * https://developer.infusionsoft.com/docs/rest/#tag/REST-Hooks/operation/create_a_hook_subscription
-     * 
-     * Payload: 
-     * {
-     *   "eventKey": "string",
-     *   "hookUrl": "string"
-     * }
-     * 
-     * @param string $payload JSON
-     * @param bool $verify Automatically verify the resthook subscription.
-     * @return stdClass Object
-     */
-    public function createRestHook(string $payload, bool $verify = true) {
-        if ($verify === true) {
-            $this->verifyRestHook();
-        }
-        return $this->create('/v1/hooks', $payload);
-    }
-
-    /**
-     * Retrieve a Hook Subscription
-     * https://developer.infusionsoft.com/docs/rest/#tag/REST-Hooks/operation/retrieve_a_hook_subscription
-     * 
-     * Retrieves an existing hook subscription and its status.
-     * 
-     * If your hook subscription becomes inactive, you may request an activation 
-     * attempt via Verify a Hook Subscription.
-     * 
-     * @param int $key
-     * @return stdClass Object
-     */
-    public function getRestHook(int $key) {
-        return $this->read('/v1/hooks/' . $key);
-    }
-
-    /**
-     * Delete a Hook Subscription
-     * https://developer.infusionsoft.com/docs/rest/#tag/REST-Hooks/operation/delete_a_hook_subscription
-     * 
-     * Stop receiving hooks by deleting an existing hook subscription.
-     * 
-     * @param int $key
-     * @return stdClass Object
-     */
-    public function deleteRestHook(int $key) {
-        return $this->delete('/v1/hooks/' . $key);
-    }
-
-    /**
-     * Verify a Hook Subscription
-     * 
-     * @return mixed null|string
-     */
-    public function verifyRestHook() {
-        if (getenv('REQUEST_METHOD') !== 'POST') {
-            return;
-        }
-        $header = $this->requestHeaders();
-        $XHookSecret = ((isset($header['X-Hook-Secret'])) ? $header['X-Hook-Secret'] : null);
-        if ($XHookSecret === null) {
-            return;
-        }
-        header('X-Hook-Secret: ' . $XHookSecret);
-        echo $this->requestBody();
-        exit;
-    }
-
     /**
      * Generic REST CRUD Methods
      * 
@@ -602,16 +519,21 @@ class GeniusKSDK {
      * helper method isn't provided in this library, or when new endpoints are 
      * added to the API.
      * 
+     * @method creaete()
+     * @method read()
+     * @method update()
+     * @method delete()
      */
 
     /**
      * Create an object
      * 
      * @param string $path
-     * @param string $payload
+     * @param array $struct
      * @return stdClass Object
      */
-    public function create(string $path, string $payload) {
+    public function create(string $path, array $struct) {
+        $payload = json_encode($struct);
         return $this->request($path, array(
                     'method' => 'POST',
                     'header' => array('Content-Type: application/json'),
@@ -633,10 +555,11 @@ class GeniusKSDK {
      * Update an object
      * 
      * @param string $path
-     * @param string $payload
+     * @param array $struct
      * @return stdClass Object
      */
-    public function update(string $path, string $payload) {
+    public function update(string $path, array $struct) {
+        $payload = json_encode($struct);
         return $this->request($path, array(
                     'method' => 'PATCH',
                     'header' => array('Content-Type: application/json'),
@@ -720,48 +643,6 @@ class GeniusKSDK {
             'header' => null,
             'content' => null
         );
-    }
-
-    /**
-     * Load the request headers from the remote host.
-     * @return array
-     */
-    private function requestHeaders() {
-        return ((function_exists('apache_request_headers')) ? apache_request_headers() : $this->buildRequestHeadersFromServer());
-    }
-
-    /**
-     * https://www.php.net/manual/en/function.apache-request-headers.php#70810
-     * 
-     * If the apache_request_headers() function doesn't exist, use this function
-     * which mimics apache_request_headers() instead.
-     * 
-     * @author limalopex.eisfux.de
-     */
-    private function buildRequestHeadersFromServer() {
-        $arh = array();
-        $rx_http = '/\AHTTP_/';
-        foreach ($_SERVER as $key => $val) {
-            if (preg_match($rx_http, $key)) {
-                $arh_key = preg_replace($rx_http, '', $key);
-                $rx_matches = array();
-// do some nasty string manipulations to restore the original letter case
-// this should work in most cases
-                $rx_matches = explode('_', $arh_key);
-                if (count($rx_matches) > 0 and strlen($arh_key) > 2) {
-                    foreach ($rx_matches as $ak_key => $ak_val)
-                        $rx_matches[$ak_key] = ucfirst($ak_val);
-                    $arh_key = implode('-', $rx_matches);
-                }
-                $arh[$arh_key] = $val;
-            }
-        }
-        $arh['Function'] = true;
-        return( $arh );
-    }
-
-    private function requestBody() {
-        return file_get_contents('php://input');
     }
 }
 
