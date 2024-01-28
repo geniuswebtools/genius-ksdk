@@ -159,34 +159,6 @@ class GeniusKSDK {
     }
 
     /**
-     * Apply Tags
-     * https://developer.infusionsoft.com/docs/restv2/#tag/Tags/operation/applyTagsUsingPOST
-     * 
-     * Apply Tag to a list of contact records
-     * 
-     * @param int $tagId
-     * @param array $contactIds
-     * @return stdClass Object
-     */
-    public function applyTagToContacts(int $tagId, array $contactIds) {
-        return $this->tagEditBulkContacts('applyTags', $tagId, $contactIds);
-    }
-
-    /**
-     * Remove Tags
-     * https://developer.infusionsoft.com/docs/restv2/#tag/Tags/operation/removeTagsUsingPOST
-     * 
-     * Remove a Tag from a list of contact records
-     * 
-     * @param int $tagId
-     * @param array $contactIds
-     * @return stdClass Object
-     */
-    public function removeTagFromContacts(int $tagId, array $contactIds) {
-        return $this->tagEditBulkContacts('removeTags', $tagId, $contactIds);
-    }
-
-    /**
      * Notes
      * https://developer.infusionsoft.com/docs/restv2/#tag/Note
      */
@@ -580,11 +552,6 @@ class GeniusKSDK {
         return $this->request($path, array(
                     'method' => 'DELETE',
         ));
-    }
-
-    protected function tagEditBulkContacts(string $context, int $tagId, array $contactIds) {
-        $payload = json_encode(array('contact_ids' => $contactIds));
-        return $this->create('/v2/tags/' . $tagId . '/contacts:' . $context, $payload);
     }
 
     private function httpHeader(array $struct) {

@@ -77,7 +77,7 @@ class Contact extends \GeniusKSDK\REST {
      * https://developer.keap.com/docs/restv2/#tag/Contact/operation/patchContactUsingPATCH
      * 
      * @param int $id
-     * @param string $payload
+     * @param array $struct
      * @return stdClass Object
      */
     public function update(int $id, array $struct) {
@@ -96,5 +96,21 @@ class Contact extends \GeniusKSDK\REST {
      */
     public function delete(int $id) {
         return $this->client->delete('/v2/contacts/' . $id);
+    }
+
+    /**
+     * Add/Remove a tag from a contact
+     * https://developer.keap.com/docs/restv2/#tag/Tags/operation/applyTagsUsingPOST
+     * https://developer.keap.com/docs/restv2/#tag/Tags/operation/removeTagsUsingPOST
+     * 
+     * @param int $contactId
+     * @param int $tagId
+     * @param string $context
+     * @return stdClass Object
+     */
+    public function tag(int $contactId, int $tagId, string $context = 'apply') {
+        $action = (($context !== 'apply') ? 'removeTags' : 'applyTags');
+        $payload = json_encode(array('contact_ids' => array($contactId)));
+        return $this->create('/v2/tags/' . $tagId . '/contacts:' . $action, $payload);
     }
 }

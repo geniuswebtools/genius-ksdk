@@ -79,4 +79,23 @@ class Contact extends \GeniusKSDK\XML {
         );
         return $this->send('APIEmailService.getOptStatus', $params);
     }
+
+    /**
+     * Add/Remove a tag from a contact
+     * https://developer.infusionsoft.com/docs/xml-rpc/#contact-add-a-tag-to-a-contact
+     * https://developer.infusionsoft.com/docs/xml-rpc/#contact-remove-a-tag-from-a-contact
+     * 
+     * @param int $contactId
+     * @param int $tagId
+     * @param string $context
+     * @return stdClass Object
+     */
+    public function tag(int $contactId, int $tagId, string $context = 'apply') {
+        $action = (($context !== 'apply') ? 'removeFromGroup' : 'addToGroup');
+        $params = array(
+            $contactId,
+            $tagId
+        );
+        return $this->send('ContactService.' . $action, $params);
+    }
 }
