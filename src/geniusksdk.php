@@ -119,6 +119,11 @@ class GeniusKSDK {
 
     /**
      * API Access
+     * XML-RPC: https://developer.keap.com/docs/xml-rpc/
+     * REST V1: https://developer.keap.com/docs/rest/
+     * REST V2: https://developer.keap.com/docs/restv2/
+     * 
+     * @return \GeniusKSDK\[REST|XML]\API 
      */
     public function api($api = 'rest') {
         return $this->model('API', $api);
@@ -136,6 +141,18 @@ class GeniusKSDK {
     }
 
     /**
+     * Tag
+     * https://developer.keap.com/docs/restv2/#tag/Tags
+     * 
+     * @return \GeniusKSDK\[REST|XML]\Tag 
+     */
+    public function tag($api = 'rest') {
+        return $this->model('Tag', $api);
+    }
+
+    /**
+     * REST Hooks
+     * https://developer.infusionsoft.com/docs/rest/#tag/REST-Hooks
      * 
      * @return @return \GeniusKSDK\REST\RESTHook 
      */
@@ -233,24 +250,6 @@ class GeniusKSDK {
      */
     public function deleteNote(int $contactId, int $noteId) {
         return $this->delete('/v2/contacts/' . $contactId . '/notes/' . $noteId);
-    }
-
-    /**
-     * Email
-     * https://developer.infusionsoft.com/docs/restv2/#tag/Email
-     */
-
-    /**
-     * Email Address
-     * https://developer.infusionsoft.com/docs/restv2/#tag/Email-Address
-     * 
-     * Retrieve an Email Address status
-     * 
-     * @param string $email
-     * @return stdClass Object
-     */
-    public function emailStatus(string $email) {
-        return $this->read('/v2/emailAddresses/' . $email);
     }
 
     /**
