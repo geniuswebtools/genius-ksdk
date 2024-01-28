@@ -37,8 +37,7 @@ class TagCategory extends \GeniusKSDK\REST {
      * @return stdClass Object
      */
     public function create(array $struct) {
-        $payload = json_encode($struct);
-        return $this->client->create('/v2/tags/categories', $payload);
+        return $this->client->create('/v2/tags/categories', $struct);
     }
 
     /**
@@ -65,8 +64,7 @@ class TagCategory extends \GeniusKSDK\REST {
      * @return stdClass Object
      */
     public function update(int $id, array $struct) {
-        $payload = json_encode($struct);
-        return $this->client->update('/v2/tags/categories/' . $id, $payload);
+        return $this->client->update('/v2/tags/categories/' . $id, $struct);
     }
 
     /**

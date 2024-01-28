@@ -46,8 +46,7 @@ class Contact extends \GeniusKSDK\REST {
      * @return stdClass Object
      */
     public function create(array $struct) {
-        $payload = json_encode($struct);
-        return $this->client->create('/v2/contacts', $payload);
+        return $this->client->create('/v2/contacts', $struct);
     }
 
     /**
@@ -81,8 +80,7 @@ class Contact extends \GeniusKSDK\REST {
      * @return stdClass Object
      */
     public function update(int $id, array $struct) {
-        $payload = json_encode($struct);
-        return $this->client->update('/v2/contacts/' . $id, $payload);
+        return $this->client->update('/v2/contacts/' . $id, $struct);
     }
 
     /**
@@ -123,7 +121,6 @@ class Contact extends \GeniusKSDK\REST {
      */
     public function tag(int $contactId, int $tagId, string $context = 'apply') {
         $action = (($context !== 'apply') ? 'removeTags' : 'applyTags');
-        $payload = json_encode(array('contact_ids' => array($contactId)));
-        return $this->create('/v2/tags/' . $tagId . '/contacts:' . $action, $payload);
+        return $this->create('/v2/tags/' . $tagId . '/contacts:' . $action, array('contact_ids' => array($contactId)));
     }
 }

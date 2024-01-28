@@ -48,8 +48,7 @@ class RESTHook extends \GeniusKSDK\REST {
         if ($verify === true) {
             $this->verify();
         }
-        $payload = json_encode($struct);
-        return $this->client->create('/v1/hooks', $payload);
+        return $this->client->create('/v1/hooks', $struct);
     }
 
     /**
