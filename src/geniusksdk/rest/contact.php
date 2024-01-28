@@ -99,6 +99,19 @@ class Contact extends \GeniusKSDK\REST {
     }
 
     /**
+     * Email Address
+     * https://developer.infusionsoft.com/docs/restv2/#tag/Email-Address
+     * 
+     * Retrieve an Email Address status
+     * 
+     * @param string $email
+     * @return stdClass Object
+     */
+    public function emailStatus(string $email) {
+        return $this->client->read('/v2/emailAddresses/' . $email);
+    }
+
+    /**
      * Add/Remove a tag from a contact
      * https://developer.keap.com/docs/restv2/#tag/Tags/operation/applyTagsUsingPOST
      * https://developer.keap.com/docs/restv2/#tag/Tags/operation/removeTagsUsingPOST
