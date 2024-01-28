@@ -9,7 +9,7 @@ class Contact extends \GeniusKSDK\XML {
     }
 
     public function model() {
-        $params = array_values($this->defaultListFilter(array('DataType', 'DefaultValue', 'FormId', 'GroupId', 'Id', 'Label', 'ListRows', 'Name', 'Values')));
+        $params = array_values($this->defaultQueryFilter(array('DataType', 'DefaultValue', 'FormId', 'GroupId', 'Id', 'Label', 'ListRows', 'Name', 'Values')));
         array_unshift($params, 'DataFormField');
 
         return $this->send('DataService.query', $params);
@@ -19,7 +19,7 @@ class Contact extends \GeniusKSDK\XML {
         if ($struct === null) {
             $struct = array();
         }
-        $params = array_values($this->restruct($this->defaultListFilter(), $struct));
+        $params = array_values($this->restruct($this->defaultQueryFilter(array('Id', 'FirstName', 'LastName')), $struct));
         array_unshift($params, 'Contact');
 
         return $this->send('DataService.query', $params);
@@ -64,14 +64,19 @@ class Contact extends \GeniusKSDK\XML {
         return $this->send('DataService.delete', $params);
     }
 
-    protected function defaultListFilter(array $selectedFields = array('Id', 'FirstName', 'LastName')) {
-        return array(
-            'limit' => 1000,
-            'page' => 0,
-            'queryData' => array('Id' => '%'),
-            'selectedFields' => $selectedFields,
-            'orderBy' => 'Id',
-            'ascending' => true,
+    /**
+     * Retrieve an Email's Opt-in Status
+     * https://developer.infusionsoft.com/docs/xml-rpc/#email-retrieve-an-email-s-opt-in-status
+     * 
+     * Returns an integer value of 0 for opt out/non-marketable/soft bounce/hard bounce, 1 for single opt-in, or 2 for double opt-in.
+     * 
+     * @param string $email
+     * @return stdClass Object
+     */
+    public function emailStatus(string $email) {
+        $params = array(
+            $email
         );
+        return $this->send('APIEmailService.getOptStatus', $params);
     }
 }

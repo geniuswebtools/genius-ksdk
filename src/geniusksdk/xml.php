@@ -31,4 +31,15 @@ abstract class XML {
         );
         return $this->client->request($this->client->endpoint(), $options);
     }
+
+    protected function defaultQueryFilter(array $selectedFields) {
+        return array(
+            'limit' => 1000,
+            'page' => 0,
+            'queryData' => array('Id' => '%'),
+            'selectedFields' => $selectedFields,
+            'orderBy' => 'Id',
+            'ascending' => true,
+        );
+    }
 }
