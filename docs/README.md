@@ -21,6 +21,7 @@ REST API.
 - **SUPPORTS** the REST API
 - **SUPPORTS** the XML-RPC API (Legacy)
 - **CAN** be used with a single access key
+---
 - Does **NOT** require a Keap developer app
 - Does **NOT** support OAuth2 authentication
 - Does **NOT** support Composer
@@ -121,6 +122,43 @@ $result = $gKSDK->createRestHook(json_encode($payload));
 echo '<pre>';
 print_r($result);
 echo '</pre>';
+```
+
+If an API helper model like Contact or Resthook hasn't been provided to simplify
+API requests, you can use the REST or XML API models to build and execute 
+those requests.
+
+```php
+require_once '/src/genius-ksdk.php';
+
+try {
+    $gKSDK = new \GeniusKSDK(array('apiKey' => 'YOUR_KEAP_API_KEY_GOES_HERE'));
+} catch (\Exception $ex) {
+    echo $ex->getMessage();
+    exit;
+}
+/**
+ * For a XML-RPC API request use the call() method and pass the service, and
+ * the correct parameters as an array.
+ */
+$service = 'ContactService.findByNameOrEmail';
+$xmlStruct = array(
+    'Dee',
+    array('Id', 'FirstName', 'Email'),
+    array('Id'),
+    true,
+    1000,
+    0,    
+);
+$result = $gKSDK->api('xml')->call($service, $xmlStruct);
+
+/**
+ * For a RESTful API request use one of the CRUD methods:
+ * create(), read(), update() or delete().
+ */
+$contactId = 123;
+$endpoint = '/v1/contacts/' . $contactId;
+$result = $gKSDK->api()->read($endpoint);
 ```
 
 ---
