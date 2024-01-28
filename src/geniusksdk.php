@@ -42,7 +42,7 @@ class GeniusKSDK {
      */
     private $model,
             $apiKey,
-            $api = 'rest';
+            $framework = 'rest';
 
     public function __construct(array $struct) {
         $this->init($struct);
@@ -53,9 +53,9 @@ class GeniusKSDK {
         }
     }
 
-    public function api(string $type = null) {
+    public function framework(string $type = null) {
         if ($type !== null) {
-            $this->api = (($type !== 'rest') ? 'xml' : 'rest');
+            $this->framework = (($type !== 'rest') ? 'xml' : 'rest');
         }
         return $this;
     }
@@ -65,7 +65,7 @@ class GeniusKSDK {
     }
 
     public function endpoint(string $uri = '') {
-        $endpoint = (($this->api !== 'rest') ? $this->xmlURL : $this->restURI . $uri);
+        $endpoint = (($this->framework !== 'rest') ? $this->xmlURL : $this->restURI . $uri);
         return ((preg_match('/^https/', $uri)) ? $uri : str_replace('//', '/', $endpoint));
     }
 
@@ -109,7 +109,7 @@ class GeniusKSDK {
         $responseBody = $this->httpBody(substr($response, $headerSize), $responsHeader);
         return (object) array(
                     'engine' => 'cURL',
-                    'api' => $this->api,
+                    'api' => $this->framework,
                     'method' => $method,
                     'error' => ((isset($error)) ? $error : false),
                     'header' => $responsHeader,
@@ -118,26 +118,29 @@ class GeniusKSDK {
     }
 
     /**
-     * Contact
-     * https://developer.infusionsoft.com/docs/rest/#tag/Contact
-     * 
+     * API Access
      */
-    public function contact($api = 'rest') {
-        $this->api($api);
-        if (!isset($this->model[$this->api]['contact'])) {
-            $className = '\GeniusKSDK\\' . $this->api . '\Contact';
-            $this->model[$this->api]['contact'] = new $className($this);
-        }
-        return $this->model[$this->api]['contact'];
+    public function api($api = 'rest') {
+        return $this->model('API', $api);
     }
 
+    /**
+     * Contact
+     * https://developer.infusionsoft.com/docs/rest/#tag/Contact
+     * https://developer.infusionsoft.com/docs/xml-rpc/#contact
+     * 
+     * @return \GeniusKSDK\[REST|XML]\Contact 
+     */
+    public function contact($api = 'rest') {
+        return $this->model('Contact', $api);
+    }
+
+    /**
+     * 
+     * @return @return \GeniusKSDK\REST\RESTHook 
+     */
     public function resthook() {
-        $this->api('rest');
-        if (!isset($this->model[$this->api]['resthook'])) {
-            $className = '\GeniusKSDK\\' . $this->api . '\Resthook';
-            $this->model[$this->api]['resthook'] = new $className($this);
-        }
-        return $this->model[$this->api]['resthook'];
+        return $this->model('Resthook', 'rest');
     }
 
     /**
@@ -643,6 +646,16 @@ class GeniusKSDK {
             'header' => null,
             'content' => null
         );
+    }
+
+    private function model(string $name, $framework = 'rest') {
+        $model = strtolower($name);
+        $this->framework($framework);
+        if (!isset($this->model[$this->framework][$model])) {
+            $className = '\GeniusKSDK\\' . $this->framework . '\\' . $name;
+            $this->model[$this->framework][$model] = new $className($this);
+        }
+        return $this->model[$this->framework][$model];
     }
 }
 
