@@ -22,6 +22,7 @@ include_once '../src/geniusksdk.php';
 $gKSDK = new \GeniusKSDK(array('apiKey' => $apiKey));
 
 $test = new \Kellicam();
+$tween = 50000;
 
 /**
  * REST contact
@@ -39,21 +40,35 @@ $response = $gKSDK->contact()->create(array(
         ));
 $contactId = (int) $response->content->id;
 $pass = ( ($response->header['code'] === '201 Created') && ($contactId > 0) );
-$test->expect($pass, 'Wrong response code/No contact Id.', $response);
+$test->expect($pass, 'Wrong response code|No contact Id.', $response);
+usleep($tween);
 
 $response = $gKSDK->contact()->read($contactId);
 $pass = ($response->header['code'] === '200 OK');
 $test->expect($pass, 'Wrong response code.', $response);
+usleep($tween);
 
 $response = $gKSDK->contact()->update($contactId, array('given_name' => 'REST Updated'));
 $pass = ($response->header['code'] === '200 OK');
 $test->expect($pass, 'Wrong response code.', $response);
+usleep($tween);
+
+$response = $gKSDK->contact()->list(array('filter' => 'email==rest.api.test@domain.tld'));
+$pass = ( ($response->header['code'] === '200 Ok') && (!empty($response->content)));
+$test->expect($pass, 'Wrong response code|Empty contacts', $response);
+usleep($tween);
 
 $response = $gKSDK->contact()->delete($contactId);
 $pass = ($response->header['code'] === '204 No Content');
 $test->expect($pass, 'Wrong response code.', $response);
 $contactId = null;
+usleep($tween);
 
+$response = $gKSDK->contact()->model();
+$pass = ($response->header['code'] === '200 Ok');
+$test->expect($pass, 'Wrong response code.', $response);
+$contactId = null;
+usleep($tween);
 
 echo $test->results();
 
