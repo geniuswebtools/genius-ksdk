@@ -151,6 +151,16 @@ class GeniusKSDK {
     }
 
     /**
+     * Tag Category
+     * https://developer.infusionsoft.com/docs/restv2/#tag/Tags
+     * 
+     * @return \GeniusKSDK\[REST|XML]\TagCategory
+     */
+    public function tagcategory($api = 'rest') {
+        return $this->model('TagCategory', $api);
+    }
+
+    /**
      * REST Hooks
      * https://developer.infusionsoft.com/docs/rest/#tag/REST-Hooks
      * 
@@ -251,7 +261,6 @@ class GeniusKSDK {
     public function deleteNote(int $contactId, int $noteId) {
         return $this->delete('/v2/contacts/' . $contactId . '/notes/' . $noteId);
     }
-
 
     /**
      * Company
