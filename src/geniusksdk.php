@@ -171,21 +171,6 @@ class GeniusKSDK {
     }
 
     /**
-     * Retrieve a list of contacts with specific tag
-     * https://developer.infusionsoft.com/docs/restv2/#tag/Tags/operation/listContactsWithTagIdUsingGET
-     * 
-     * Retrieve a list of contacts To search for null or empty fields use filter==NONE
-     * 
-     * @param int $tagId
-     * @param array $params
-     * @return stdClass Object
-     */
-    public function listContacsWithTag(int $tagId, array $params = null) {
-        $httpQuery = $this->buildHTTPQuery($params);
-        return $this->read('/v2/tags/' . $tagId . '/contacts' . $httpQuery);
-    }
-
-    /**
      * Notes
      * https://developer.infusionsoft.com/docs/restv2/#tag/Note
      */

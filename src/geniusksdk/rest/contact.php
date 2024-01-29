@@ -123,4 +123,19 @@ class Contact extends \GeniusKSDK\REST {
         $action = (($context !== 'apply') ? 'removeTags' : 'applyTags');
         return $this->create('/v2/tags/' . $tagId . '/contacts:' . $action, array('contact_ids' => array($contactId)));
     }
+
+    /**
+     * Retrieve a list of contacts with specific tag
+     * https://developer.infusionsoft.com/docs/restv2/#tag/Tags/operation/listContactsWithTagIdUsingGET
+     * 
+     * Retrieve a list of contacts To search for null or empty fields use filter==NONE
+     * 
+     * @param int $tagId
+     * @param array $params
+     * @return stdClass Object
+     */
+    public function listWithTag(int $tagId, array $params = null) {
+        $httpQuery = $this->buildHTTPQuery($params);
+        return $this->client->read('/v2/tags/' . $tagId . '/contacts' . $httpQuery);
+    }
 }
