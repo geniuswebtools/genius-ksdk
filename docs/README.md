@@ -26,6 +26,23 @@ REST API.
 - Does **NOT** support OAuth2 authentication
 - Does **NOT** support Composer
 
+## What you need to know
+Where possible _and applicable_, I have tried to keep the methods between the two
+API types: REST and XML-RPC, similar.  However, they're not completely interchangable.
+
+The APIs vary between the parameters required for certain filters, and even though
+I've used as many of the V2 REST API endpoints, the V1 endpoints use different
+structs for the filter content.  I may eventually tackle trying to noralize the
+data between the two APIs on the returned results, but not any time soon.
+
+Searching and filter options are more limited with the REST API than the XML
+XML-RPC DataService.query.  If you're looking for specific records you may want
+to use the call() method in the XML\API class model to build your query. An 
+example is provided below of how to use the call() method.
+
+RESTHooks are only supported via the REST API, and you will NOT find an alternative
+in the XML class models.
+
 ## Usage
 Load the library into your PHP code.  The built in autoloader will handle loading 
 any additional classes and traits.
@@ -124,7 +141,7 @@ print_r($result);
 echo '</pre>';
 ```
 
-If an API helper model like Contact or Resthook hasn't been provided to simplify
+If an API class model like Contact or Resthook hasn't been provided to simplify
 API requests, you can use the REST or XML API models to build and execute 
 those requests.
 
