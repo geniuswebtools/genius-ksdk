@@ -141,6 +141,14 @@ class GeniusKSDK {
     }
 
     /**
+     * Notes
+     * https://developer.infusionsoft.com/docs/restv2/#tag/Note
+     */
+    public function note() {
+        return $this->model('Note');
+    }
+
+    /**
      * Tag
      * https://developer.keap.com/docs/restv2/#tag/Tags
      * 
@@ -168,83 +176,6 @@ class GeniusKSDK {
      */
     public function resthook() {
         return $this->model('Resthook', 'rest');
-    }
-
-    /**
-     * Notes
-     * https://developer.infusionsoft.com/docs/restv2/#tag/Note
-     */
-
-    /**
-     * List Notes
-     * https://developer.infusionsoft.com/docs/restv2/#tag/Note/operation/listNotesUsingGET_1
-     * 
-     * Retrieves a list of notes
-     * 
-     * @param int $contactId
-     * @param array $params
-     * @return stdClass Object
-     */
-    public function listNotes(int $contactId, array $params = null) {
-        $httpQuery = $this->buildHTTPQuery($params);
-        return $this->read('/v2/contacts/' . $contactId . '/notes' . $httpQuery);
-    }
-
-    /**
-     * Create a Note
-     * https://developer.infusionsoft.com/docs/restv2/#tag/Note/operation/createNoteUsingPOST_1
-     * 
-     * Creates a new note as the authenticated user. Either a "title" or "body" is required
-     * 
-     * @param int $contactId
-     * @param string $payload
-     * @return stdClass Object
-     */
-    public function createNote(int $contactId, string $payload) {
-        return $this->create('https://api.infusionsoft.com/crm/rest/v2/contacts/' . $contactId . '/notes', $payload);
-    }
-
-    /**
-     * Get a Note
-     * https://developer.infusionsoft.com/docs/restv2/#tag/Note/operation/getNoteUsingGET_1
-     * 
-     * Get the specified note
-     * 
-     * @param int $contactId
-     * @param int $noteId
-     * @return stdClass Object
-     */
-    public function getNote(int $contactId, int $noteId) {
-        return $this->read('/v2/contacts/' . $contactId, '/notes/' . $noteId);
-    }
-
-    /**
-     * Update a note
-     * https://developer.infusionsoft.com/docs/restv2/#tag/Note/operation/updateNoteUsingPATCH
-     * 
-     * Update a note for a contact
-     * 
-     * @param int $contactId
-     * @param int $noteId
-     * @param string $payload
-     * @return stdClass Object
-     */
-    public function updateNote(int $contactId, int $noteId, string $payload) {
-        return $this->update('/v2/contacts/' . $contactId . '/notes/' . $noteId, $payload);
-    }
-
-    /**
-     * Delete a Note
-     * https://developer.infusionsoft.com/docs/restv2/#tag/Note/operation/deleteNoteUsingDELETE_1
-     * 
-     * Deletes the specified note
-     * 
-     * @param int $contactId
-     * @param int $noteId
-     * @return stdClass Object
-     */
-    public function deleteNote(int $contactId, int $noteId) {
-        return $this->delete('/v2/contacts/' . $contactId . '/notes/' . $noteId);
     }
 
     /**
