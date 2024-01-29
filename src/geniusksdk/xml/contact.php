@@ -98,4 +98,17 @@ class Contact extends \GeniusKSDK\XML {
         );
         return $this->send('ContactService.' . $action, $params);
     }
+
+    public function listWithTag(int $tagId, array $struct = null) {
+        if ($struct === null) {
+            $struct = array();
+        }
+        $restruct = $this->restruct($this->defaultQueryFilter(array('GroupId', 'ContactId', 'Contact.FirstName', 'Contact.LastName', 'Contact.Email')), $struct);
+        $restruct['queryData'] = array('GroupId' => $tagId);
+        $restruct['orderBy'] = 'ContactId';
+        $params = array_values($restruct);
+        array_unshift($params, 'ContactGroupAssign');
+
+        return $this->send('DataService.query', $params);
+    }
 }
