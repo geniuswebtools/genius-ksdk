@@ -121,7 +121,7 @@ echo '</pre>';
 /**
  * List Resthook Events
  */
-$result = $gKSDK->resthookEvents();
+$result = $gKSDK->resthook()->events();
 echo '<pre>';
 print_r($result);
 echo '</pre>';
@@ -135,7 +135,7 @@ $payload = (object) array(
             'eventKey' => 'order.add',
             'hookUrl' => 'https://domain.tld/path/to/hook/listener}',
 );
-$result = $gKSDK->createRestHook(json_encode($payload));
+$result = $gKSDK->resthook()=>create($payload);
 echo '<pre>';
 print_r($result);
 echo '</pre>';
