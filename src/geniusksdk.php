@@ -118,7 +118,7 @@ class GeniusKSDK {
     }
 
     /**
-     * API Access
+     * Generic API Access
      * XML-RPC: https://developer.keap.com/docs/xml-rpc/
      * REST V1: https://developer.keap.com/docs/rest/
      * REST V2: https://developer.keap.com/docs/restv2/
@@ -127,6 +127,16 @@ class GeniusKSDK {
      */
     public function api($api = 'rest') {
         return $this->model('API', $api);
+    }
+
+    /**
+     * Company
+     * https://developer.infusionsoft.com/docs/restv2/#tag/Company
+     * 
+     * @return \GeniusKSDK\REST\Company
+     */
+    public function company() {
+        return $this->model('Company');
     }
 
     /**
@@ -143,6 +153,8 @@ class GeniusKSDK {
     /**
      * Notes
      * https://developer.infusionsoft.com/docs/restv2/#tag/Note
+     * 
+     * @return \GeniusKSDK\REST\Note
      */
     public function note() {
         return $this->model('Note');
@@ -178,99 +190,6 @@ class GeniusKSDK {
         return $this->model('Resthook', 'rest');
     }
 
-    /**
-     * Company
-     * https://developer.infusionsoft.com/docs/restv2/#tag/Company
-     */
-
-    /**
-     * List Companies
-     * https://developer.infusionsoft.com/docs/restv2/#tag/Company/operation/listCompaniesUsingGET_1
-     * 
-     * Retrieves a list of all Companies
-     * 
-     * @param string $payload
-     * @return stdClass Object
-     */
-    public function listCompanies(array $params = null) {
-        $httpQuery = $this->buildHTTPQuery($params);
-        return $this->read('/v2/companies' . $httpQuery);
-    }
-
-    /**
-     * Create a Company
-     * https://developer.infusionsoft.com/docs/restv2/#tag/Company/operation/createCompanyUsingPOST_1
-     * 
-     * Creates a new Company.country_code is required if region is specified.
-     * 
-     * @param string $payload
-     * @return stdClass Object
-     */
-    public function createCompany(string $payload) {
-        return $this->create('/v2/companies', $payload);
-    }
-
-    /**
-     * Retrieve a Company
-     * https://developer.infusionsoft.com/docs/restv2/#tag/Company/operation/getCompanyUsingGET_1
-     * 
-     * Retrieves a single Company
-     * 
-     * @param int $id
-     * @return stdClass Object
-     */
-    public function getCompany(int $id) {
-        return $this->read('/v2/companies/' . $id);
-    }
-
-    /**
-     * Delete a Company
-     * https://developer.infusionsoft.com/docs/restv2/#tag/Company/operation/deleteCompanyUsingDELETE
-     * 
-     * Deletes the specified Company
-     * 
-     * @param int $id
-     * @return stdClass Object
-     */
-    public function deleteCompany(int $id) {
-        return $this->delete('' . $id);
-    }
-
-    /**
-     * Update a Company
-     * https://developer.infusionsoft.com/docs/restv2/#tag/Company/operation/patchCompanyUsingPATCH
-     * 
-     * Updates a Company with the values provided in the request
-     * 
-     * @param int $id
-     * @param string $payload
-     * @return stdClass Object
-     */
-    public function updateCompany(int $id, string $payload) {
-        return $this->update('/v2/companies/' . $id, $payload);
-    }
-
-    /**
-     * List Tagged Companies 
-     * https://developer.infusionsoft.com/docs/restv2/#tag/Tags/operation/listCompaniesForTagIdUsingGET_1
-     * 
-     * Retrieves a list of companies that have the given tag applied To search 
-     * for null or empty fields use filter==NONE
-     * 
-     * @param int $tagId
-     * @param array $params
-     * @return stdClass Object
-     */
-    public function listTaggedCompanies(int $tagId, array $params = null) {
-        $httpQuery = $this->buildHTTPQuery($params);
-        return $this->read('/v2/tags/' . $tagId . '/companies' . $httpQuery);
-    }
-
-    /**
-     * REST Hooks
-     * https://developer.infusionsoft.com/docs/rest/#tag/REST-Hooks
-     * 
-     */
     /**
      * Generic REST CRUD Methods
      * 
