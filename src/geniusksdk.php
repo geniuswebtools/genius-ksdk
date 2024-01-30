@@ -46,11 +46,6 @@ class GeniusKSDK {
 
     public function __construct(array $struct) {
         $this->init($struct);
-        try {
-            $this->checkStruct();
-        } catch (\Exception $ex) {
-            throw new \Exception($ex->getMessage());
-        }
     }
 
     public function framework(string $type = null) {
@@ -306,6 +301,8 @@ class GeniusKSDK {
         }
 
         $this->model = array('rest' => array(), 'xml' => array());
+
+        $this->checkStruct();
     }
 
     private function checkStruct() {
