@@ -101,17 +101,30 @@ class GeniusKSDK {
         curl_setopt_array($curl, $curlOpts);
         $response = curl_exec($curl);
         if (curl_error($curl)) {
-            $error = curl_error($curl);
+            throw new \Exception('cURL Error: ' . curl_error($curl));
         }
         $headerSize = curl_getinfo($curl, CURLINFO_HEADER_SIZE);
         curl_close($curl);
         $responsHeader = $this->httpHeader(array_map('trim', (array) explode("\r", trim(substr($response, 0, $headerSize)))));
         $responseBody = $this->httpBody(substr($response, $headerSize), $responsHeader);
+        switch ($this->framework) {
+            case 'xml':
+                if (isset($responseBody['faultString'])) {
+                    throw new \Exception('XML-RPC Error(' . $responseBody['faultCode'] . '): ' . $responseBody['faultString']);
+                }
+                break;
+            case 'rest':
+                if (isset($responseBody->code)) {
+                    throw new \Exception('REST Error(' . $responseBody->code . ' ' . $responseBody->status . '): ' . $responseBody->message);
+                }
+                break;
+            default:
+                break;
+        }
         return (object) array(
                     'engine' => 'cURL',
                     'api' => $this->framework,
                     'method' => $method,
-                    'error' => ((isset($error)) ? $error : false),
                     'header' => $responsHeader,
                     'content' => $responseBody,
         );
