@@ -13,7 +13,7 @@ but it would be better to use a Service Account Key instead._
 ## Why use Genius KSDK?
 This library makes requests to the Keap REST API by using a Personal Access Token 
 or a Service Account Key.  Using one of these two keys means you don't have to 
-create a Keap Developer account, and use the OAuth2 authentication implementation.
+create a Keap Developer account and use the OAuth2 authentication implementation.
 
 Here's a quick list of the benefits for using this library to access the Keap
 REST API.
@@ -135,7 +135,7 @@ $payload = (object) array(
             'eventKey' => 'order.add',
             'hookUrl' => 'https://domain.tld/path/to/hook/listener}',
 );
-$result = $gKSDK->resthook()=>create($payload);
+$result = $gKSDK->resthook()->create($payload);
 echo '<pre>';
 print_r($result);
 echo '</pre>';
