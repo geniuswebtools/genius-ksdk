@@ -112,12 +112,13 @@ class GeniusKSDK {
 
     /**
      * Product
+     * https://developer.infusionsoft.com/docs/rest/#tag/Product
      * https://developer.keap.com/docs/xml-rpc/#product
      * 
-     * @return \GeniusKSDK\XML\Product
+     * @return \GeniusKSDK\[REST|XML]\Product
      */
-    public function product() {
-        return $this->model('Product', 'xml');
+    public function product($api = 'rest') {
+        return $this->model('Product', $api);
     }
 
     /**
