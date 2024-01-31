@@ -59,72 +59,6 @@ class GeniusKSDK {
         return $this->apiKey;
     }
 
-    public function endpoint(string $uri = '') {
-        $endpoint = (($this->framework !== 'rest') ? $this->xmlURL : $this->restURI . $uri);
-        return ((preg_match('/^https/', $uri)) ? $uri : str_replace('//', '/', $endpoint));
-    }
-
-    /**
-     * @param string $endpoint
-     * @param array $struct
-     * @return stdClass Object
-     */
-    public function request(string $endpoint, array $struct = null) {
-        $options = $this->restruct($this->defaultOptions(), $struct);
-        $method = $options['method'];
-        $header = array_merge((array) $options['header'], array('X-Keap-API-Key: ' . $this->apiKey));
-        $content = $options['content'];
-        $curlOpts = array(
-            CURLOPT_URL => $this->endpoint($endpoint),
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_MAXREDIRS => 3,
-            CURLOPT_TIMEOUT => 1,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => $method,
-            CURLOPT_HTTPHEADER => $header,
-            CURLOPT_VERBOSE => 1,
-            CURLOPT_HEADER => 1,
-            CURLOPT_ENCODING => '',
-            CURLOPT_SSL_VERIFYPEER => true,
-            CURLOPT_CAPATH => __DIR__ . '/cainfusionsoft.pem',
-        );
-        if (!empty($content)) {
-            $curlOpts[CURLOPT_POSTFIELDS] = $content;
-        }
-        $curl = curl_init();
-        curl_setopt_array($curl, $curlOpts);
-        $response = curl_exec($curl);
-        if (curl_error($curl)) {
-            throw new \Exception('cURL Error: ' . curl_error($curl));
-        }
-        $headerSize = curl_getinfo($curl, CURLINFO_HEADER_SIZE);
-        curl_close($curl);
-        $responsHeader = $this->httpHeader(array_map('trim', (array) explode("\r", trim(substr($response, 0, $headerSize)))));
-        $responseBody = $this->httpBody(substr($response, $headerSize), $responsHeader);
-        switch ($this->framework) {
-            case 'xml':
-                if (isset($responseBody['faultString'])) {
-                    throw new \Exception('XML-RPC Error(' . $responseBody['faultCode'] . '): ' . $responseBody['faultString']);
-                }
-                break;
-            case 'rest':
-                if (isset($responseBody->code)) {
-                    throw new \Exception('REST Error(' . $responseBody->code . ' ' . $responseBody->status . '): ' . $responseBody->message);
-                }
-                break;
-            default:
-                break;
-        }
-        return (object) array(
-                    'engine' => 'cURL',
-                    'api' => $this->framework,
-                    'method' => $method,
-                    'header' => $responsHeader,
-                    'content' => $responseBody,
-        );
-    }
-
     /**
      * Generic API Access
      * XML-RPC: https://developer.keap.com/docs/xml-rpc/
@@ -186,6 +120,14 @@ class GeniusKSDK {
      */
     public function tagcategory($api = 'rest') {
         return $this->model('TagCategory', $api);
+    }
+
+    /**
+     * Webform
+     * https://developer.keap.com/docs/xml-rpc/#webform
+     */
+    public function webform() {
+        return $this->model('Webform', 'xml');
     }
 
     /**
@@ -263,6 +205,72 @@ class GeniusKSDK {
         return $this->request($path, array(
                     'method' => 'DELETE',
         ));
+    }
+
+    public function endpoint(string $uri = '') {
+        $endpoint = (($this->framework !== 'rest') ? $this->xmlURL : $this->restURI . $uri);
+        return ((preg_match('/^https/', $uri)) ? $uri : str_replace('//', '/', $endpoint));
+    }
+
+    /**
+     * @param string $endpoint
+     * @param array $struct
+     * @return stdClass Object
+     */
+    public function request(string $endpoint, array $struct = null) {
+        $options = $this->restruct($this->defaultOptions(), $struct);
+        $method = $options['method'];
+        $header = array_merge((array) $options['header'], array('X-Keap-API-Key: ' . $this->apiKey));
+        $content = $options['content'];
+        $curlOpts = array(
+            CURLOPT_URL => $this->endpoint($endpoint),
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_MAXREDIRS => 3,
+            CURLOPT_TIMEOUT => 1,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => $method,
+            CURLOPT_HTTPHEADER => $header,
+            CURLOPT_VERBOSE => 1,
+            CURLOPT_HEADER => 1,
+            CURLOPT_ENCODING => '',
+            CURLOPT_SSL_VERIFYPEER => true,
+            CURLOPT_CAPATH => __DIR__ . '/cainfusionsoft.pem',
+        );
+        if (!empty($content)) {
+            $curlOpts[CURLOPT_POSTFIELDS] = $content;
+        }
+        $curl = curl_init();
+        curl_setopt_array($curl, $curlOpts);
+        $response = curl_exec($curl);
+        if (curl_error($curl)) {
+            throw new \Exception('cURL Error: ' . curl_error($curl));
+        }
+        $headerSize = curl_getinfo($curl, CURLINFO_HEADER_SIZE);
+        curl_close($curl);
+        $responsHeader = $this->httpHeader(array_map('trim', (array) explode("\r", trim(substr($response, 0, $headerSize)))));
+        $responseBody = $this->httpBody(substr($response, $headerSize), $responsHeader);
+        switch ($this->framework) {
+            case 'xml':
+                if (isset($responseBody['faultString'])) {
+                    throw new \Exception('XML-RPC Error(' . $responseBody['faultCode'] . '): ' . $responseBody['faultString']);
+                }
+                break;
+            case 'rest':
+                if (isset($responseBody->code)) {
+                    throw new \Exception('REST Error(' . $responseBody->code . ' ' . $responseBody->status . '): ' . $responseBody->message);
+                }
+                break;
+            default:
+                break;
+        }
+        return (object) array(
+                    'engine' => 'cURL',
+                    'api' => $this->framework,
+                    'method' => $method,
+                    'header' => $responsHeader,
+                    'content' => $responseBody,
+        );
     }
 
     private function httpHeader(array $struct) {
