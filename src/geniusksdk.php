@@ -93,6 +93,14 @@ class GeniusKSDK {
     }
 
     /**
+     * Data
+     * @return \GeniusKSDK\XML\Data
+     */
+    public function data() {
+        return $this->model('Data', 'xml');
+    }
+
+    /**
      * Notes
      * https://developer.infusionsoft.com/docs/restv2/#tag/Note
      * 
@@ -100,6 +108,16 @@ class GeniusKSDK {
      */
     public function note() {
         return $this->model('Note');
+    }
+
+    /**
+     * Product
+     * https://developer.keap.com/docs/xml-rpc/#product
+     * 
+     * @return \GeniusKSDK\XML\Product
+     */
+    public function product() {
+        return $this->model('Product', 'xml');
     }
 
     /**
