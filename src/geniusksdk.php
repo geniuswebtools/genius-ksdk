@@ -123,8 +123,20 @@ class GeniusKSDK {
     }
 
     /**
+     * Shipping
+     * https://developer.keap.com/docs/xml-rpc/#shipping
+     * 
+     * @return \GeniusKSDK\XML\Shipping
+     */
+    public function shipping() {
+        return $this->model('Shipping', 'xml');
+    }
+
+    /**
      * Webform
      * https://developer.keap.com/docs/xml-rpc/#webform
+     * 
+     * @return \GeniusKSDK\XML\Webform
      */
     public function webform() {
         return $this->model('Webform', 'xml');
