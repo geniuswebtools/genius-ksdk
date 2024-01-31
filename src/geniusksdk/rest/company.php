@@ -72,7 +72,7 @@ class Company extends \GeniusKSDK\REST {
      * @return stdClass Object
      */
     public function delete(int $id) {
-        return $this->client->delete('' . $id);
+        return $this->client->delete('/v2/companies/' . $id);
     }
 
     /**
