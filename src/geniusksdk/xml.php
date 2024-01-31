@@ -18,9 +18,6 @@ abstract class XML {
             'output_type' => 'php',
         ));
 
-        if (is_array($content) && xmlrpc_is_fault($content)) {
-            trigger_error("xmlrpc: $content[faultString] ($content[faultCode])");
-        }
         $options = array(
             'method' => 'POST',
             'header' => array(
