@@ -257,7 +257,7 @@ class GeniusKSDK {
             CURLOPT_URL => $this->endpoint($endpoint),
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_MAXREDIRS => 3,
-            CURLOPT_TIMEOUT => 1,
+            CURLOPT_TIMEOUT => 10,
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => $method,
