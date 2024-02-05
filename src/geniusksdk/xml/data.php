@@ -18,7 +18,7 @@ class Data extends \GeniusKSDK\XML {
      */
     public function list(string $table, array $struct) {
         $selectFields = (isset($struct['selectedFields'])) ? (array) $struct['selectedFields'] : array();
-        $params = array_values($this->defaultQueryFilter($selectFields));
+        $params = array_values($this->restruct($this->defaultQueryFilter($selectFields), $struct));
         array_unshift($params, $table);
 
         return $this->send('DataService.query', $params);
