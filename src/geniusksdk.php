@@ -110,6 +110,10 @@ class GeniusKSDK {
         return $this->model('Note');
     }
 
+    public function order($api = 'rest') {
+        return $this->model('Order', $api);
+    }
+
     /**
      * Product
      * https://developer.infusionsoft.com/docs/rest/#tag/Product
