@@ -72,13 +72,20 @@ class GeniusKSDK {
     }
 
     /**
+     * BusinessProfile
+     */
+    public function businessprofile() {
+        return $this->model('BusinessProfile', 'rest');
+    }
+
+    /**
      * Company
      * https://developer.infusionsoft.com/docs/restv2/#tag/Company
      * 
      * @return \GeniusKSDK\REST\Company
      */
     public function company() {
-        return $this->model('Company');
+        return $this->model('Company', 'rest');
     }
 
     /**
