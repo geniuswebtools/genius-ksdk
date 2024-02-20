@@ -12,6 +12,16 @@ class API extends \GeniusKSDK\REST {
     }
 
     /**
+     * Alias of read() for consistency in other REST class models.
+     * 
+     * @param string $path
+     * @return stdClass Object
+     */
+    public function list(string $path) {
+        return $this->read($path);
+    }
+
+    /**
      * Create an object
      * 
      * @param string $path
