@@ -74,8 +74,8 @@ class GeniusKSDK {
     /**
      * Affiliate
      */
-    public function affiliate() {
-        return $this->model('Affiliate', 'xml');
+    public function affiliate($api = 'rest') {
+        return $this->model('Affiliate', $api);
     }
 
     /**
