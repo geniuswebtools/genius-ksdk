@@ -72,6 +72,13 @@ class GeniusKSDK {
     }
 
     /**
+     * Affiliate
+     */
+    public function affiliate() {
+        return $this->model('Affiliate', 'xml');
+    }
+
+    /**
      * BusinessProfile
      */
     public function businessprofile() {
