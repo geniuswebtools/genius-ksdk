@@ -22,7 +22,7 @@ class Affiliate extends \GeniusKSDK\XML {
      * Retrieve a Summary of Affiliate Statistics
      * Retrieves a summary of statistics for a list of affiliates.
      * 
-     * @param string $src [clawbacks|commissions|payments|stats|totals|links]
+     * @param string $src [clawbacks|commissions|payments|stats]
      * @param int $affiliateId The Id number of the affiliate
      * @param string $filterStartDate dateTime Starting date for the date range
      * @param string $filterEndDate dateTime Ending date for the date range
