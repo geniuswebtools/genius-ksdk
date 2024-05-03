@@ -83,7 +83,7 @@ class Affiliate extends \GeniusKSDK\REST {
         return $this->client->delete('/v2/affiliates/' . $id);
     }
 
-    /*
+    /**
      * code string required
      *      The Affiliate code which have some validations.
      * 
@@ -104,7 +104,6 @@ class Affiliate extends \GeniusKSDK\REST {
      * 
      * @return array
      */
-
     public function defaultStruct() {
         return array(
             'code' => '', // required
