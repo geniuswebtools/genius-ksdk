@@ -79,6 +79,13 @@ class GeniusKSDK {
     }
 
     /**
+     * Affiliate Program
+     */
+    public function affiliateProgram($api = 'rest') {
+        return $this->model('AffiliateProgram', $api);
+    }
+
+    /**
      * BusinessProfile
      */
     public function businessprofile() {
