@@ -32,6 +32,9 @@ class GeniusKSDK {
     use \GeniusKSDK\Quirk;
 
     public $restURI = 'https://api.infusionsoft.com/crm/rest',
+            /**
+             * @deprecated Use the REST API if a comparable request exists
+             */
             $xmlURL = 'https://api.infusionsoft.com/crm/xmlrpc/v1';
 
     /**
@@ -69,6 +72,13 @@ class GeniusKSDK {
      */
     public function api($api = 'rest') {
         return $this->model('API', $api);
+    }
+
+    /**
+     * Account
+     */
+    public function account($api = 'rest') {
+        return $this->model('Account', 'rest');
     }
 
     /**
@@ -242,10 +252,11 @@ class GeniusKSDK {
      * @param array $struct
      * @return stdClass Object
      */
-    public function update(string $path, array $struct) {
+    public function update(string $path, array $struct, $method = 'PATCH') {
         $payload = json_encode($struct);
+        $useMethod = strtoupper($method);
         return $this->request($path, array(
-                    'method' => 'PATCH',
+                    'method' => (($useMethod !== 'PATCH') ? $useMethod : 'PATCH'),
                     'header' => array('Content-Type: application/json'),
                     'content' => $payload,
         ));
