@@ -52,12 +52,13 @@ class API extends \GeniusKSDK\REST {
      * 
      * @param string $path
      * @param array $struct
+     * @param string $method
      * @return stdClass Object
      */
-    public function update(string $path, array $struct) {
+    public function update(string $path, array $struct, string $method = 'PATCH') {
         $payload = json_encode($struct);
         return $this->client->request($path, array(
-                    'method' => 'PATCH',
+                    'method' => $method,
                     'header' => array('Content-Type: application/json'),
                     'content' => $payload,
         ));
