@@ -10,16 +10,24 @@ class Affiliate extends \GeniusKSDK\XML {
 
     /**
      * Retrieve Clawbacks
+     * https://developer.infusionsoft.com/docs/xml-rpc/#affiliate-retrieve-clawbacks
+     * 
      * Retrieves all clawed back commissions for a particular affiliate. Claw 
      * backs typically occur when an order has been refunded to the customer.
      * 
      * Retrieve Commissions
+     * https://developer.infusionsoft.com/docs/xml-rpc/#affiliate-retrieve-commissions
+     * 
      * Retrieves all commissions for a specific affiliate within a date range.
      * 
      * Retrieve Payments
+     * https://developer.infusionsoft.com/docs/xml-rpc/#affiliate-retrieve-payments
+     * 
      * Retrieves all payments for a specific affiliate within a date range
      * 
      * Retrieve a Summary of Affiliate Statistics
+     * https://developer.infusionsoft.com/docs/xml-rpc/#affiliate-retrieve-a-summary-of-affiliate-statistics
+     * 
      * Retrieves a summary of statistics for a list of affiliates.
      * 
      * @param string $src [clawbacks|commissions|payments|stats]
@@ -96,6 +104,9 @@ class Affiliate extends \GeniusKSDK\XML {
     /**
      * Delete Affiliate
      * 
+     * Experimental: This operation is not provided by default.
+     * USE AT YOUR OWN RISK
+     * 
      * @param int $id
      * @return stcClass Object
      */
@@ -109,6 +120,8 @@ class Affiliate extends \GeniusKSDK\XML {
 
     /**
      * Retrieve Redirect Links
+     * https://developer.infusionsoft.com/docs/xml-rpc/#affiliate-retrieve-redirect-links
+     * 
      * Retrieves a list of the redirect links for the specified Affiliate.
      * 
      * @param int $affiliateId
@@ -124,6 +137,9 @@ class Affiliate extends \GeniusKSDK\XML {
 
     /**
      * Retrieve Running Totals
+     * https://developer.infusionsoft.com/docs/xml-rpc/#affiliate-retrieve-running-totals
+     * 
+     * Retrieves the current balances for Amount Earned, Clawbacks, and Running Balance.
      * 
      * @param int|array $affiliateIds
      * @return stdClass
