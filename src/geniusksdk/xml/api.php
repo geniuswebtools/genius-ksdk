@@ -13,6 +13,10 @@ class API extends \GeniusKSDK\XML {
 
     /**
      * This method provides full access to the  XML-RPC API.
+     * 
+     * @param string $service
+     * @param array $struct
+     * @return stdClass Object
      */
     public function call(string $service, array $struct) {
         return $this->send($service, $struct);
