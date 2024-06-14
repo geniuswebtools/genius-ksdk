@@ -2,6 +2,17 @@
 
 namespace GeniusKSDK\XML;
 
+/**
+ * Affiliate
+ * https://developer.infusionsoft.com/docs/xml-rpc/#affiliate
+ * 
+ * The Affiliate Service is used to pull commission data and activities for 
+ * affiliates. With this service, you have access to Clawbacks, Commissions, 
+ * Payouts, Running Totals, and the Activity Summary. The methods in the Affiliate 
+ * Service mirror the reports produced inside Infusionsoft. To manage affiliate 
+ * information (ie Name, Phone, etc.) you will need to use the DataService.
+ * 
+ */
 class Affiliate extends \GeniusKSDK\XML {
 
     public function __construct(\GeniusKSDK $client) {
