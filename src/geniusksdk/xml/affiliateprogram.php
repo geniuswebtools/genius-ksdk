@@ -2,6 +2,13 @@
 
 namespace GeniusKSDK\XML;
 
+/**
+ * Affiliate Program
+ * https://developer.infusionsoft.com/docs/xml-rpc/#affiliate-program
+ * 
+ * The Affiliate Program Service allows access to some of features in the Referral Partner Center
+ * 
+ */
 class AffiliateProgram extends \GeniusKSDK\XML {
 
     public function __construct(\GeniusKSDK $client) {
@@ -18,6 +25,11 @@ class AffiliateProgram extends \GeniusKSDK\XML {
         return $this->send('AffiliateProgramService.getAffiliatePrograms', array());
     }
 
+    /**
+     * Operation not supported by the API
+     * 
+     * @throws \Exception
+     */
     public function create() {
         throw new \Exception(sprintf(self::EX_UNSUPPORTED, __METHOD__));
     }
@@ -49,10 +61,20 @@ class AffiliateProgram extends \GeniusKSDK\XML {
         return $this->send($service, $params);
     }
 
+    /**
+     * Operation not supported by the API
+     * 
+     * @throws \Exception
+     */
     public function update() {
         throw new \Exception(sprintf(self::EX_UNSUPPORTED, __METHOD__));
     }
 
+    /**
+     * Operation not supported by the API
+     * 
+     * @throws \Exception
+     */
     public function delete() {
         throw new \Exception(sprintf(self::EX_UNSUPPORTED, __METHOD__));
     }
