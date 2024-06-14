@@ -77,7 +77,7 @@ class GeniusKSDK {
     /**
      * Account
      */
-    public function account($api = 'rest') {
+    public function account() {
         return $this->model('Account', 'rest');
     }
 
@@ -302,7 +302,7 @@ class GeniusKSDK {
             CURLOPT_HEADER => 1,
             CURLOPT_ENCODING => '',
             CURLOPT_SSL_VERIFYPEER => true,
-            CURLOPT_CAPATH => __DIR__ . '/infusionsoft.pem',
+            CURLOPT_CAPATH => __DIR__ . '/cainfusionsoft.pem',
         );
         if (!empty($content)) {
             $curlOpts[CURLOPT_POSTFIELDS] = $content;
