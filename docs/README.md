@@ -6,23 +6,26 @@
 This library is designed to work with the Keap XML-RPC legacy API and the REST 
 APIs using a [Personal Access Token or a Service Account Key.](https://developer.infusionsoft.com/pat-and-sak/)
 
-The library is **not** designed to work with the OAuth2 Authentication.
+The library is intended for 1st party integrations working directly with the owner 
+of the Keap Account. The libary **not** designed to work with the OAuth2 
+Authentication. If you are looking to create 3rd party apps you shoule use the
+OAuth2 implementation and the Official Keap API.
 
-_Testing proves that this authentication method can also use a Legacy API Key,
-but it would be better to use a Service Account Key instead._
+_Sunsetting of the Legacy API Keys has begun. Brownouts using the Legacy API keys 
+will start on Aug 5, 2024 and access removed on Oct 31, 2024._
 
 ## Why use Genius KSDK?
 This library makes requests to the Keap XML-RPC and REST API by using a Personal 
 Access Token or a Service Account Key.  Using one of these two keys means you 
 don't have to create a Keap Developer account and use the OAuth2 authentication 
-implementation, and you still have access to the XML-RPC API.
+implementation for 1st party integrations.
 
 Here's a quick list of the benefits for using this library:
 
 - **SUPPORTS** the REST API V1 & V2 endpoints
 - **SUPPORTS** the XML-RPC API (Legacy)
-- **CAN** be used with a single access key
-- **USE** the API that matches your needs
+- **CAN** be used with a PAT or SAK
+- **USE** the API that matches your clients need
 ---
 - Does **NOT** require a Keap developer app
 - Does **NOT** support OAuth2 authentication
@@ -34,16 +37,14 @@ API types: REST and XML-RPC, similar.  However, they're not completely interchan
 
 The APIs vary between the parameters required for certain filters, and even though
 I've used as many of the V2 REST API endpoints, the V1 endpoints use different
-structs for the filter content.  I may work on noralizing the data between the API 
-variations on the returned results in the future, but not any time soon.
+structs for the filter content.
 
 Searching and filter options appear to be more limited with the REST API than the 
 XML-RPC DataService.query.  If you're looking for specific records you may want to 
 use the call() method in the XML\API class model to build your query. An example 
 is provided on how to use the call() method.
 
-**RESTHooks** are only supported via the REST API, and you will NOT find an alternative
-in the XML class models.
+**RESTHooks** are only supported via the REST API.
 
 ## Usage
 Load the library into your PHP code.  The built in autoloader will handle loading 
@@ -53,7 +54,7 @@ any additional classes and traits.
 require_once '/src/genius-ksdk.php';
 
 try {
-    $gKSDK = new \GeniusKSDK(array('apiKey' => 'YOUR_KEAP_API_KEY_GOES_HERE'));
+    $gKSDK = new \GeniusKSDK(array('apiKey' => 'YOUR_KEAP_PAT_or_SAK_GOES_HERE'));
 } catch (\Exception $ex) {
     echo $ex->getMessage();
     exit;
