@@ -11,8 +11,9 @@ of the Keap Account. The libary **not** designed to work with the OAuth2
 Authentication. If you are looking to create 3rd party apps you shoule use the
 OAuth2 implementation and the Official Keap API.
 
-_Sunsetting of the Legacy API Keys has begun. Brownouts using the Legacy API keys 
-will start on Aug 5, 2024 and access removed on Oct 31, 2024._
+> [!IMPORTANT]
+>_Sunsetting of the Legacy API Keys has begun. Brownouts using the Legacy API keys 
+>will start on Aug 5, 2024 and access removed on Oct 31, 2024._
 
 ## Why use Genius KSDK?
 This library makes requests to the Keap XML-RPC and REST API by using a Personal 
