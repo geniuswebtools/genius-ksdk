@@ -57,8 +57,9 @@ class API extends \GeniusKSDK\REST {
      */
     public function update(string $path, array $struct, string $method = 'PATCH') {
         $payload = json_encode($struct);
+        $useMethod = strtoupper($method);
         return $this->client->request($path, array(
-                    'method' => $method,
+                    'method' => (($useMethod !== 'PATCH') ? $useMethod : 'PATCH'),
                     'header' => array('Content-Type: application/json'),
                     'content' => $payload,
         ));
