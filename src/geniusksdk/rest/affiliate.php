@@ -106,7 +106,7 @@ class Affiliate extends \GeniusKSDK\REST {
     }
 
     /**
-     * Delete an affiliate
+     * Delete an affiliate is not supported
      * 
      * @param int $id
      * @throws \Exception
