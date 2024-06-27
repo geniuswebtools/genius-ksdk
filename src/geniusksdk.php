@@ -1,9 +1,9 @@
 <?php
+
 /**
  * @author Marion Dorsett <marion.dorsett@gmail.com>
  * @link https://github.com/geniuswebtools/genius-ksdk
  */
-
 /**
  * MUST register the autoloader first, so it CAN autoload Traits.
  */
@@ -80,6 +80,9 @@ class GeniusKSDK {
 
     /**
      * Account
+     * @deprecated since version 1
+     * 
+     * Use businessprofile()
      */
     public function account() {
         return $this->model('Account', 'rest');
