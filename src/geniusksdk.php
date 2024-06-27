@@ -103,6 +103,13 @@ class GeniusKSDK {
     }
 
     /**
+     * Appointment
+     */
+    public function appointment() {
+        return $this->model('Appointment', 'rest');
+    }
+
+    /**
      * BusinessProfile
      */
     public function businessprofile() {
