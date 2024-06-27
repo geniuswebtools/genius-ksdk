@@ -26,11 +26,44 @@ class Affiliate extends \GeniusKSDK\REST {
      * 
      * Retrieves a list of all affiliates
      * 
+     * List Commissions
+     * https://developer.infusionsoft.com/docs/rest/#tag/Affiliate/operation/listCommissionsUsingGET
+     * 
+     * Retrieve a list of Commissions based on Affiliate or Date Range
+     * 
+     * List Affiliate Redirects
+     * https://developer.infusionsoft.com/docs/rest/#tag/Affiliate/operation/listAffiliateRedirectLinksUsingGET
+     * 
+     * Retrieves a list of all affiliate redirects
+     * 
+     * List affiliate summaries
+     * https://developer.infusionsoft.com/docs/rest/#tag/Affiliate/operation/listSummariesUsingGET
+     * 
+     * Retrieve a list of affiliate summaries
+     * 
+     * List Affiliate clawbacks
+     * https://developer.infusionsoft.com/docs/rest/#tag/Affiliate/operation/listAffiliateClawbacksUsingGET
+     * 
+     * Retrieves a list of all affiliate clawbacks
+     * 
+     * List Affiliate payments
+     * https://developer.infusionsoft.com/docs/rest/#tag/Affiliate/operation/listPaymentsUsingGET
+     * 
+     * Retrieves a list of all affiliate payments
+     * 
+     * 
      * @param array $struct
      * @return stdClass Object
      */
-    public function list(array $struct = null) {
+    public function list($src, array $struct = null) {
         $httpQuery = $this->buildHTTPQuery($struct);
+        '/v1/affiliates';
+        '/v1/affiliates/commissions';
+        '/v1/affiliates/redirectlinks';
+        '/v1/affiliates/summaries';
+        '/v1/affiliates/{affiliateId}/clawbacks';
+        '/v1/affiliates/{affiliateId}/payments';
+
         return $this->client->read('/v1/affiliates' . $httpQuery);
     }
 
