@@ -1,4 +1,8 @@
 <?php
+/**
+ * @author Marion Dorsett <marion.dorsett@gmail.com>
+ * @link https://github.com/geniuswebtools/genius-ksdk
+ */
 
 /**
  * MUST register the autoloader first, so it CAN autoload Traits.
