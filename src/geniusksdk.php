@@ -302,7 +302,7 @@ class GeniusKSDK {
             CURLOPT_HEADER => 1,
             CURLOPT_ENCODING => '',
             CURLOPT_SSL_VERIFYPEER => true,
-            CURLOPT_CAPATH => __DIR__ . '/cainfusionsoft.pem',
+            CURLOPT_CAPATH => __DIR__ . '/infusionsoft.pem',
         );
         if (!empty($content)) {
             $curlOpts[CURLOPT_POSTFIELDS] = $content;
