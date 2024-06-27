@@ -9,6 +9,16 @@ class BusinessProfile extends \GeniusKSDK\REST {
     }
 
     /**
+     * Create is not supported
+     * 
+     * @param int $id
+     * @throws \Exception
+     */
+    public function create(int $id) {
+        throw new \Exception(sprintf(self::EX_UNSUPPORTED, 'Create'));
+    }
+
+    /**
      * Retrieve business profile
      * https://developer.keap.com/docs/restv2/#tag/Business-Profile/operation/getBusinessProfileUsingGET
      * 
@@ -29,7 +39,18 @@ class BusinessProfile extends \GeniusKSDK\REST {
      * @param array $struct
      * @return stdClass Object
      */
-    public function update(int $id, array $struct) {
-        return $this->client->update('/v2/businessProfile/', $struct);
+    public function update(int $id, array $struct, array $mask = null) {
+        $httpQuery = (($mask !== null) ? $this->buildHTTPQuery($mask) : '');
+        return $this->client->update('/v2/businessProfile/' . $httpQuery, $struct);
+    }
+
+    /**
+     * Delete is not supported
+     * 
+     * @param int $id
+     * @throws \Exception
+     */
+    public function delete(int $id) {
+        throw new \Exception(sprintf(self::EX_UNSUPPORTED, 'Delete'));
     }
 }
