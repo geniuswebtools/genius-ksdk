@@ -3,6 +3,8 @@
 namespace GeniusKSDK\REST;
 
 /**
+ * @deprecated 1.0 Use v2 Business Profile
+ * 
  * REST V1 
  * @link https://developer.infusionsoft.com/docs/rest/#tag/Account-Info REST V1 documentation
  * 
@@ -20,8 +22,6 @@ namespace GeniusKSDK\REST;
  * Resolution:
  * Use the v2 Business Profile endpoints:
  * https://developer.keap.com/docs/restv2/#tag/Business-Profile
- * 
- * @alias BusinessProfile
  * 
  */
 class Account extends BusinessProfile {
