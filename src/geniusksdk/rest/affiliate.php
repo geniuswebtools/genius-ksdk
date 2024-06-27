@@ -109,7 +109,7 @@ class Affiliate extends \GeniusKSDK\REST {
      * Delete an affiliate
      * 
      * @param int $id
-     * @return stdClass Object
+     * @throws \Exception
      */
     public function delete(int $id) {
         throw new \Exception(sprintf(self::EX_UNSUPPORTED, 'DELETE'));
