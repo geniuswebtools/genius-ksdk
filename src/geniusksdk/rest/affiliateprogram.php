@@ -21,24 +21,24 @@ class AffiliateProgram extends \GeniusKSDK\REST {
     }
 
     /**
+     * Create an affiliate program is not supported
      * 
      * 
      * @param array $struct
-     * @return stdClass Object
+     * @throws \Exception
      */
     public function create(array $struct) {
-//        $values = $this->restruct($this->defaultStruct(), $struct);
-//        return $this->client->create('/v2/affiliates', $values);
+        throw new \Exception(sprintf(self::EX_UNSUPPORTED, 'Create'));
     }
 
     /**
-     * 
+     * Read an affiliate program is not supported
      * 
      * @param int $id
-     * @return stdClass Object 
+     * @throws \Exception
      */
     public function read(int $id) {
-//        return $this->client->read('/v2/affiliates/' . $id);
+        throw new \Exception(sprintf(self::EX_UNSUPPORTED, 'Read'));
     }
 
     /**
@@ -56,24 +56,12 @@ class AffiliateProgram extends \GeniusKSDK\REST {
     }
 
     /**
-     * 
+     * Delete an affiliate program is not supported
      * 
      * @param int $id
-     * @return stdClass Object
+     * @throws \Exception
      */
     public function delete(int $id) {
-//        return $this->client->delete('/v2/affiliates/' . $id);
-    }
-
-    /**
-     * @return array
-     */
-    public function defaultStruct() {
-        return array(
-//            'code' => '', // required
-//            'contact_id' => 0, // required
-//            'name' => '', // The Affiliate name will be derived from the Contact, when not explicitly provided
-//            'status' => 'active', // "active" "inactive"
-        );
+        throw new \Exception(sprintf(self::EX_UNSUPPORTED, 'Delete'));
     }
 }
