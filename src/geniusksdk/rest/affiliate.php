@@ -55,16 +55,14 @@ class Affiliate extends \GeniusKSDK\REST {
      * @param array $struct
      * @return stdClass Object
      */
-    public function list($src, array $struct = null) {
+    public function list(array $struct = null, $src = 'affiliates', int $affiliateId = 0) {
+        try {
+            $endpoint = $this->obj($src, $affiliateId);
+        } catch (\Exception $ex) {
+            throw new \Exception($ex->getMessage());
+        }
         $httpQuery = $this->buildHTTPQuery($struct);
-        '/v1/affiliates';
-        '/v1/affiliates/commissions';
-        '/v1/affiliates/redirectlinks';
-        '/v1/affiliates/summaries';
-        '/v1/affiliates/{affiliateId}/clawbacks';
-        '/v1/affiliates/{affiliateId}/payments';
-
-        return $this->client->read('/v1/affiliates' . $httpQuery);
+        return $this->client->read($endpoint . $httpQuery);
     }
 
     /**
@@ -103,7 +101,8 @@ class Affiliate extends \GeniusKSDK\REST {
      * @return stdClass Object
      */
     public function update(int $id, array $struct) {
-        return $this->client->update('/v2/affiliates/' . $id, $struct);
+        $values = $this->restruct($this->updateStruct(), $struct);
+        return $this->client->update('/v2/affiliates/' . $id, $values);
     }
 
     /**
@@ -113,7 +112,7 @@ class Affiliate extends \GeniusKSDK\REST {
      * @return stdClass Object
      */
     public function delete(int $id) {
-        return $this->client->delete('/v2/affiliates/' . $id);
+        throw new \Exception(sprintf(self::EX_UNSUPPORTED, 'DELETE'));
     }
 
     /**
@@ -144,5 +143,40 @@ class Affiliate extends \GeniusKSDK\REST {
             'name' => '', // The Affiliate name will be derived from the Contact, when not explicitly provided
             'status' => 'active', // "active" "inactive"
         );
+    }
+
+    /**
+     * 
+     * @return array
+     */
+    public function updateStruct() {
+        return array(
+            'code' => '', // required
+            'status' => '', // "active" "inactive"
+        );
+    }
+
+    /**
+     * Returns the requested REST endpoint.
+     * 
+     * @param string $src
+     * @return string
+     */
+    protected function obj(string $src, int $affiliateId) {
+        $candidate = strtolower($src);
+        $serviceList = array(
+            'affiliates' => '/v1/affiliates',
+            'commissions' => '/v1/affiliates/commissions',
+            'redirects' => '/v1/affiliates/redirectlinks',
+            'stats' => '/v1/affiliates/summaries',
+            'clawbacks' => '/v1/affiliates/' . $affiliateId . '/clawbacks',
+            'payments' => '/v1/affiliates/' . $affiliateId . '/payments',
+        );
+
+        $service = ( (array_key_exists($candidate, $serviceList)) ? $serviceList[$candidate] : false);
+        if ($service === false) {
+            throw new \Exception('Invalid $src, must be one of [' . implode(', ', array_keys($serviceList)) . ']');
+        }
+        return $service;
     }
 }
