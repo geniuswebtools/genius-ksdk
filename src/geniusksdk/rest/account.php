@@ -8,56 +8,20 @@ namespace GeniusKSDK\REST;
  * 
  * Bugs Submitted 2024-06-14:
  * Keap Case # 03313290: REST V1 Update Account Profile Bugs
+ * 1) The /v1/account/profile endpoint accepts PUTs with almost no information - namely { "address": { "field": null } }, and will overwrite all non-specified fields as null with the exception of  time_zone, logo_url, currency_code, language_tag, and business_goals.
+ * 2) The account profile address always returns "OTHER" regardless of input, which is at odds with the example in our documentation that shows "BILLING".
+ * 3) As you pointed out, the endpoint only accepts ISO-3/ALPHA-3 input, yet only provides ISO-2/ALPHA-2 output.
+ * 
+ * Resolution:
+ * Use the v2 Business Profile endpoints:
+ * https://developer.keap.com/docs/restv2/#tag/Business-Profile
+ * 
+ * @alias BusinessProfile
  * 
  */
-class Account extends \GeniusKSDK\REST {
+class Account extends BusinessProfile {
 
     public function __construct(\GeniusKSDK $client) {
         parent::__construct($client);
-    }
-
-    public function create() {
-        throw new \Exception(sprintf(self::EX_UNSUPPORTED, __METHOD__));
-    }
-
-    /**
-     * Retrieve account profile
-     * https://developer.infusionsoft.com/docs/rest/#tag/Account-Info/operation/getAccountProfileUsingGET
-     * 
-     * Retrieves profile/company info for an account.
-     * 
-     * Bugs Submitted 2024-06-14:
-     * Keap Case # 03313290: REST V1 Update Account Profile Bugs
-     * 
-     * - The returned address.field will ALWAYS be OTHER.
-     * - The address.country_code returned as ALPHA-2 
-     * 
-     * @return stdClass Object 
-     */
-    public function read() {
-        return $this->client->read('/v1/account/profile');
-    }
-
-    /**
-     * Updates an account profile
-     * https://api.infusionsoft.com/crm/rest/v1/account/profile
-     * 
-     * Updates profile/company info for an account.
-     * 
-     * Bugs Submitted 2024-06-14:
-     * Keap Case # 03313290: REST V1 Update Account Profile Bugs
-     * 1. ALWAYS & ONLY use the 'OTHER' address or it will be NULLed on update.
-     * 2. Use the ALPHA-3 country_code when setting the address country. ALPHA-2 
-     *    will be returned.
-     * 
-     * @param array $struct
-     * @return stdClass Object
-     */
-    public function update(array $struct) {
-        return $this->client->update('/v1/account/profile', $struct, 'PUT');
-    }
-
-    public function delete(int $id) {
-        throw new \Exception(sprintf(self::EX_UNSUPPORTED, __METHOD__));
     }
 }
