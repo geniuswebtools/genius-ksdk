@@ -124,6 +124,13 @@ class GeniusKSDK {
     }
 
     /**
+     * Campaign
+     */
+    public function campaign() {
+        return $this->model('Campaign', 'rest');
+    }
+
+    /**
      * Company
      * https://developer.infusionsoft.com/docs/restv2/#tag/Company
      * 
