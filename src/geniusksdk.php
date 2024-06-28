@@ -115,6 +115,13 @@ class GeniusKSDK {
     public function automation() {
         return $this->model('Automation', 'rest');
     }
+    
+    /**
+     * Automation Category
+     */
+    public function automationCategory() {
+        return $this->model('AutomationCategory', 'rest');
+    }
 
     /**
      * BusinessProfile
