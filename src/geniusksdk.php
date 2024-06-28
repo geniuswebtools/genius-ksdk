@@ -115,7 +115,7 @@ class GeniusKSDK {
     public function automation() {
         return $this->model('Automation', 'rest');
     }
-    
+
     /**
      * Automation Category
      */
@@ -139,9 +139,6 @@ class GeniusKSDK {
 
     /**
      * Company
-     * https://developer.infusionsoft.com/docs/restv2/#tag/Company
-     * 
-     * @return \GeniusKSDK\REST\Company
      */
     public function company() {
         return $this->model('Company', 'rest');
@@ -149,10 +146,6 @@ class GeniusKSDK {
 
     /**
      * Contact
-     * https://developer.infusionsoft.com/docs/rest/#tag/Contact
-     * https://developer.infusionsoft.com/docs/xml-rpc/#contact
-     * 
-     * @return \GeniusKSDK\[REST|XML]\Contact 
      */
     public function contact($api = 'rest') {
         return $this->model('Contact', $api);
@@ -160,7 +153,6 @@ class GeniusKSDK {
 
     /**
      * Data
-     * @return \GeniusKSDK\XML\Data
      */
     public function data() {
         return $this->model('Data', 'xml');
@@ -168,9 +160,6 @@ class GeniusKSDK {
 
     /**
      * Notes
-     * https://developer.infusionsoft.com/docs/restv2/#tag/Note
-     * 
-     * @return \GeniusKSDK\REST\Note
      */
     public function note() {
         return $this->model('Note');
@@ -182,10 +171,6 @@ class GeniusKSDK {
 
     /**
      * Product
-     * https://developer.infusionsoft.com/docs/rest/#tag/Product
-     * https://developer.keap.com/docs/xml-rpc/#product
-     * 
-     * @return \GeniusKSDK\[REST|XML]\Product
      */
     public function product($api = 'rest') {
         return $this->model('Product', $api);
@@ -193,9 +178,6 @@ class GeniusKSDK {
 
     /**
      * Tag
-     * https://developer.keap.com/docs/restv2/#tag/Tags
-     * 
-     * @return \GeniusKSDK\[REST|XML]\Tag 
      */
     public function tag($api = 'rest') {
         return $this->model('Tag', $api);
@@ -203,9 +185,6 @@ class GeniusKSDK {
 
     /**
      * Tag Category
-     * https://developer.infusionsoft.com/docs/restv2/#tag/Tags
-     * 
-     * @return \GeniusKSDK\[REST|XML]\TagCategory
      */
     public function tagcategory($api = 'rest') {
         return $this->model('TagCategory', $api);
@@ -213,9 +192,6 @@ class GeniusKSDK {
 
     /**
      * Shipping
-     * https://developer.keap.com/docs/xml-rpc/#shipping
-     * 
-     * @return \GeniusKSDK\XML\Shipping
      */
     public function shipping() {
         return $this->model('Shipping', 'xml');
@@ -223,9 +199,6 @@ class GeniusKSDK {
 
     /**
      * Webform
-     * https://developer.keap.com/docs/xml-rpc/#webform
-     * 
-     * @return \GeniusKSDK\XML\Webform
      */
     public function webform() {
         return $this->model('Webform', 'xml');
@@ -233,26 +206,10 @@ class GeniusKSDK {
 
     /**
      * REST Hooks
-     * https://developer.infusionsoft.com/docs/rest/#tag/REST-Hooks
-     * 
-     * @return @return \GeniusKSDK\REST\RESTHook 
      */
     public function resthook() {
         return $this->model('Resthook', 'rest');
     }
-
-    /**
-     * Generic REST CRUD Methods
-     * 
-     * These methods can be used to make CRUD requests to the Keap REST API when 
-     * helper method isn't provided in this library, or when new endpoints are 
-     * added to the API.
-     * 
-     * @method creaete()
-     * @method read()
-     * @method update()
-     * @method delete()
-     */
 
     /**
      * Create an object
