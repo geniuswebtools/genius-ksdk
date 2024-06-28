@@ -282,9 +282,13 @@ class GeniusKSDK {
      * @param string $path
      * @return stdClass Object
      */
-    public function delete(string $path) {
+    public function delete(string $path, array $struct = null) {
+        $header = (($struct !== null) ? array('Content-Type: application/json') : null);
+        $payload = (($struct !== null) ? json_encode($struct) : null);
         return $this->request($path, array(
                     'method' => 'DELETE',
+                    'header' => $header,
+                    'content' => $payload,
         ));
     }
 
