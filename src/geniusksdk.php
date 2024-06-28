@@ -110,6 +110,13 @@ class GeniusKSDK {
     }
 
     /**
+     * Automation
+     */
+    public function automation() {
+        return $this->model('Automation', 'rest');
+    }
+
+    /**
      * BusinessProfile
      */
     public function businessprofile() {
