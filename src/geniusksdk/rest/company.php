@@ -23,6 +23,22 @@ class Company extends \GeniusKSDK\REST {
     }
 
     /**
+     * List Tagged Companies 
+     * https://developer.infusionsoft.com/docs/restv2/#tag/Tags/operation/listCompaniesForTagIdUsingGET_1
+     * 
+     * Retrieves a list of companies that have the given tag applied To search 
+     * for null or empty fields use filter==NONE
+     * 
+     * @param int $tagId
+     * @param array $params
+     * @return stdClass Object
+     */
+    public function listTagged(int $tagId, array $params = null) {
+        $httpQuery = $this->buildHTTPQuery($params);
+        return $this->client->read('/v2/tags/' . $tagId . '/companies' . $httpQuery);
+    }
+
+    /**
      * Create a Company
      * https://developer.infusionsoft.com/docs/restv2/#tag/Company/operation/createCompanyUsingPOST_1
      * 
@@ -73,21 +89,5 @@ class Company extends \GeniusKSDK\REST {
      */
     public function delete(int $id) {
         return $this->client->delete('/v2/companies/' . $id);
-    }
-
-    /**
-     * List Tagged Companies 
-     * https://developer.infusionsoft.com/docs/restv2/#tag/Tags/operation/listCompaniesForTagIdUsingGET_1
-     * 
-     * Retrieves a list of companies that have the given tag applied To search 
-     * for null or empty fields use filter==NONE
-     * 
-     * @param int $tagId
-     * @param array $params
-     * @return stdClass Object
-     */
-    public function listTagged(int $tagId, array $params = null) {
-        $httpQuery = $this->buildHTTPQuery($params);
-        return $this->client->read('/v2/tags/' . $tagId . '/companies' . $httpQuery);
     }
 }
