@@ -394,13 +394,23 @@ class GeniusKSDK {
             if (!isset($this->model[$apiVersion])) {
                 $this->model[$apiVersion] = array();
             }
-            try {
-                $this->model[$apiVersion][$model] = new $className($this);
-            } catch (\Exception $ex) {
-                throw new \Exception(__CLASS__ . ' cannot find the requested model ' . $className);
-            }
+
+            $this->model[$apiVersion][$model] = new $className($this);
         }
         return $this->model[$apiVersion][$model];
+    }
+
+    public function __destruct() {
+        if (is_null($e = error_get_last())) {
+            return;
+        }
+        if (!preg_match('/GeniusKSDK/', $e['message'])) {
+            return;
+        }
+
+        echo '<pre>';
+        print_r($e['message']);
+        echo '</pre>';
     }
 }
 
