@@ -76,18 +76,18 @@ class GeniusKSDK {
     }
 
     /**
-     * Override API version per request. (Assuming a REST v3 in the future.)
+     * Generic model that can be used for basic CRUD operations.
      * REST V2: https://developer.keap.com/docs/restv2/
      * 
      * @return \GeniusKSDK\REST\[V2]\API 
      */
     public function api(string $version = null) {
-        $apiVersion = (($version !== null) ? strotolower($version) : $this->apiVersion);
+        $apiVersion = (($version !== null) ? strotolower($version) : $this->apiVersion());
         return $this->model('API', $apiVersion);
     }
 
     /**
-     * Contact
+     * Contact API
      */
     public function contact($apiVersion = 'v2') {
         return $this->model('Contact', $apiVersion);
