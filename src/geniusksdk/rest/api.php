@@ -3,22 +3,14 @@
 namespace GeniusKSDK\REST;
 
 /**
- * This class provides full access to the REST API.
+ * This class provides access to the REST API using basic CRUD operations.
+ * 
+ * This class DOES NOT enforce a REST base URL.
  */
-class API extends \GeniusKSDK\REST {
+class API extends \GeniusKSDK\REST\V2 {
 
     public function __construct(\GeniusKSDK $client) {
         parent::__construct($client);
-    }
-
-    /**
-     * Alias of read() for consistency in other REST class models.
-     * 
-     * @param string $path
-     * @return stdClass Object
-     */
-    public function list(string $path) {
-        return $this->read($path);
     }
 
     /**
