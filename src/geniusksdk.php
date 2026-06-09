@@ -81,9 +81,15 @@ class GeniusKSDK {
      * 
      * @return \GeniusKSDK\REST\[V2]\API 
      */
-    public function api(string $version = null) {
-        $apiVersion = (($version !== null) ? strotolower($version) : $this->apiVersion());
-        return $this->model('API', $apiVersion);
+    public function api() {
+        $className = '\GeniusKSDK\REST\API';
+        $isModel = $this->model['api'] ?? false;
+        if (!$isModel) {
+            if (!isset($this->model['api'])) {
+                $this->model['api'] = new $className($this);
+            }
+        }
+        return $this->model['api'];
     }
 
     /**
