@@ -149,5 +149,4 @@ echo '<pre>' . print_r($result, 1) . '</pre>';
 
 ---
 Make sure to checkout the [official Keap developer documentation](https://developer.infusionsoft.com/developer-guide/)
-
 Review the Keap [API Token Quota and Usage Measurements](https://developer.infusionsoft.com/api-token-quota-and-usage-measurements/)
