@@ -385,18 +385,22 @@ class GeniusKSDK {
         );
     }
 
-    private function model(string $name, $apiVersion = null) {
-        $this->apiVersion($apiVersion);
-        $className = '\GeniusKSDK\REST\\' . $this->apiVersion . '\\' . $name;
+    private function model(string $name, $version = null) {
+        $apiVersion = (($version !== null) ? strtolower($version) : $this->apiVersion());
+        $className = '\GeniusKSDK\REST\\' . $apiVersion . '\\' . $name;
         $model = strtolower($className);
-        if (!isset($this->model[$model])) {
+        $isModel = $this->model[$apiVersion][$model] ?? false;
+        if ($isModel) {
+            if (!isset($this->model[$apiVersion])) {
+                $this->model[$apiVersion] = array();
+            }
             try {
-                $this->model[$model] = new $className($this);
+                $this->model[$apiVersion][$model] = new $className($this);
             } catch (\Exception $ex) {
-                return false;
+                throw new \Exception(__CLASS__ . ' cannot find the requested model ' . $className);
             }
         }
-        return $this->model[$model];
+        return $this->model[$apiVersion][$model];
     }
 }
 
