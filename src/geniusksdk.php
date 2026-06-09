@@ -71,16 +71,18 @@ class GeniusKSDK {
      * @return $this
      */
     public function apiVersion(string $branch = null) {
-        $this->apiVersion = 'v2';
+        $this->apiVersion = ($branch !== null) ? strotolower($branch) : 'v2';
         return $this;
     }
 
     /**
+     * Override API version per request. (Assuming a REST v3 in the future.)
      * REST V2: https://developer.keap.com/docs/restv2/
      * 
      * @return \GeniusKSDK\REST\[V2]\API 
      */
-    public function api($apiVersion = 'v2') {
+    public function api(string $version = null) {
+        $apiVersion = (($version !== null) ? strotolower($version) : $this->apiVersion);
         return $this->model('API', $apiVersion);
     }
 
