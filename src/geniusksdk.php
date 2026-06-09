@@ -390,7 +390,7 @@ class GeniusKSDK {
         $className = '\GeniusKSDK\REST\\' . $apiVersion . '\\' . $name;
         $model = strtolower($className);
         $isModel = $this->model[$apiVersion][$model] ?? false;
-        if ($isModel) {
+        if (!$isModel) {
             if (!isset($this->model[$apiVersion])) {
                 $this->model[$apiVersion] = array();
             }
