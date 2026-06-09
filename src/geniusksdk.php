@@ -5,7 +5,7 @@
  * @link https://github.com/geniuswebtools/genius-ksdk
  */
 /**
- * MUST register the autoloader first, so it CAN autoload Traits.
+ * MUST register the autoloader first, so it CAN autoload traits.
  */
 spl_autoload_register('geniusksdk_autoloader');
 
@@ -15,7 +15,7 @@ spl_autoload_register('geniusksdk_autoloader');
  * IMPORTANT! This library is not associated or maintained by Keap, and is an 
  * independent project. Please do not contact Keap for support.
  * 
- * * This library currently supports the Keap REST API V1 and V2 endpoints.
+ * * This library only supports Keap REST API V2 endpoints.
  * * This library DOES NOT use the OAuth2 authentication method.
  * * This library makes requests to the Keap REST API by using a Personal Access 
  *   Token or a Service Account Key.  
@@ -35,11 +35,7 @@ class GeniusKSDK {
 
     use \GeniusKSDK\Quirk;
 
-    public $restURI = 'https://api.infusionsoft.com/crm/rest',
-            /**
-             * @deprecated Use the REST API if a comparable request exists
-             */
-            $xmlURL = 'https://api.infusionsoft.com/crm/xmlrpc/v1';
+    protected $restURI = 'https://api.infusionsoft.com/crm/rest';
 
     /**
      * Expects a Personal Access Token or a Service Account Key.
@@ -47,19 +43,20 @@ class GeniusKSDK {
      * 
      * @var string $apiKey 
      */
-    private $model,
-            $apiKey,
-            $framework = 'rest';
+    private $apiKey,
+            /**
+             * As of 2026 the v2 is the only supported API.
+             */
+            $apiVersion = 'v2',
+            /**
+             * A place holder for the loaded API class models.  This prevents
+             * reinstantiating a model after it's already been called in the 
+             * current request.
+             */
+            $model = array();
 
     public function __construct(array $struct) {
         $this->init($struct);
-    }
-
-    public function framework(string $type = null) {
-        if ($type !== null) {
-            $this->framework = (($type !== 'rest') ? 'xml' : 'rest');
-        }
-        return $this;
     }
 
     public function apiKey() {
@@ -67,149 +64,135 @@ class GeniusKSDK {
     }
 
     /**
-     * Generic API Access
-     * XML-RPC: https://developer.keap.com/docs/xml-rpc/
-     * REST V1: https://developer.keap.com/docs/rest/
+     * REST V2 is the current active branch
+     * REST V1 is deprecated
+     * 
+     * @param string $branch
+     * @return $this
+     */
+    public function apiVersion(string $branch = null) {
+        $this->apiVersion = 'v2';
+        return $this;
+    }
+
+    /**
      * REST V2: https://developer.keap.com/docs/restv2/
      * 
-     * @return \GeniusKSDK\[REST|XML]\API 
+     * @return \GeniusKSDK\REST\[V2]\API 
      */
-    public function api($api = 'rest') {
-        return $this->model('API', $api);
-    }
-
-    /**
-     * Account
-     * @deprecated since version 1
-     * 
-     * Use businessprofile()
-     */
-    public function account() {
-        return $this->model('Account', 'rest');
-    }
-
-    /**
-     * Affiliate
-     */
-    public function affiliate($api = 'rest') {
-        return $this->model('Affiliate', $api);
-    }
-
-    /**
-     * Affiliate Program
-     */
-    public function affiliateProgram($api = 'rest') {
-        return $this->model('AffiliateProgram', $api);
-    }
-
-    /**
-     * Appointment
-     */
-    public function appointment() {
-        return $this->model('Appointment', 'rest');
-    }
-
-    /**
-     * Automation
-     */
-    public function automation() {
-        return $this->model('Automation', 'rest');
-    }
-
-    /**
-     * Automation Category
-     */
-    public function automationCategory() {
-        return $this->model('AutomationCategory', 'rest');
-    }
-
-    /**
-     * BusinessProfile
-     */
-    public function businessprofile() {
-        return $this->model('BusinessProfile', 'rest');
-    }
-
-    /**
-     * Campaign
-     */
-    public function campaign() {
-        return $this->model('Campaign', 'rest');
-    }
-
-    /**
-     * Company
-     */
-    public function company() {
-        return $this->model('Company', 'rest');
+    public function api($apiVersion = 'v2') {
+        return $this->model('API', $apiVersion);
     }
 
     /**
      * Contact
      */
-    public function contact($api = 'rest') {
-        return $this->model('Contact', $api);
+    public function contact($apiVersion = 'v2') {
+        return $this->model('Contact', $apiVersion);
     }
 
-    /**
-     * Data
-     */
-    public function data() {
-        return $this->model('Data', 'xml');
-    }
-
-    /**
-     * Notes
-     */
-    public function note() {
-        return $this->model('Note');
-    }
-
-    public function order($api = 'rest') {
-        return $this->model('Order', $api);
-    }
-
-    /**
-     * Product
-     */
-    public function product($api = 'rest') {
-        return $this->model('Product', $api);
-    }
-
-    /**
-     * Tag
-     */
-    public function tag($api = 'rest') {
-        return $this->model('Tag', $api);
-    }
-
-    /**
-     * Tag Category
-     */
-    public function tagcategory($api = 'rest') {
-        return $this->model('TagCategory', $api);
-    }
-
-    /**
-     * Shipping
-     */
-    public function shipping() {
-        return $this->model('Shipping', 'xml');
-    }
-
-    /**
-     * Webform
-     */
-    public function webform() {
-        return $this->model('Webform', 'xml');
-    }
-
-    /**
-     * REST Hooks
-     */
-    public function resthook() {
-        return $this->model('Resthook', 'rest');
-    }
+//    /**
+//     * Affiliate
+//     */
+//    public function affiliate($apiVersion = 'v2') {
+//        return $this->model('Affiliate', $apiVersion);
+//    }
+//
+//    /**
+//     * Affiliate Program
+//     */
+//    public function affiliateProgram($api = 'rest') {
+//        return $this->model('AffiliateProgram', $api);
+//    }
+//
+//    /**
+//     * Appointment
+//     */
+//    public function appointment() {
+//        return $this->model('Appointment', 'rest');
+//    }
+//
+//    /**
+//     * Automation
+//     */
+//    public function automation() {
+//        return $this->model('Automation', 'rest');
+//    }
+//
+//    /**
+//     * Automation Category
+//     */
+//    public function automationCategory() {
+//        return $this->model('AutomationCategory', 'rest');
+//    }
+//
+//    /**
+//     * BusinessProfile
+//     */
+//    public function businessprofile() {
+//        return $this->model('BusinessProfile', 'rest');
+//    }
+//
+//    /**
+//     * Campaign
+//     */
+//    public function campaign() {
+//        return $this->model('Campaign', 'rest');
+//    }
+//
+//    /**
+//     * Company
+//     */
+//    public function company() {
+//        return $this->model('Company', 'rest');
+//    }
+//
+//    /**
+//     * Data
+//     */
+//    public function data() {
+//        return $this->model('Data', 'xml');
+//    }
+//
+//    /**
+//     * Notes
+//     */
+//    public function note() {
+//        return $this->model('Note');
+//    }
+//
+//    public function order($api = 'rest') {
+//        return $this->model('Order', $api);
+//    }
+//
+//    /**
+//     * Product
+//     */
+//    public function product($api = 'rest') {
+//        return $this->model('Product', $api);
+//    }
+//
+//    /**
+//     * Tag
+//     */
+//    public function tag($api = 'rest') {
+//        return $this->model('Tag', $api);
+//    }
+//
+//    /**
+//     * Tag Category
+//     */
+//    public function tagcategory($api = 'rest') {
+//        return $this->model('TagCategory', $api);
+//    }
+//
+//    /**
+//     * REST Hooks
+//     */
+//    public function resthook() {
+//        return $this->model('Resthook', 'rest');
+//    }
+////
 
     /**
      * Create an object
@@ -234,7 +217,11 @@ class GeniusKSDK {
      * @return stdClass Object
      */
     public function read(string $path) {
-        return $this->request($path);
+        try {
+            return $this->request($path);
+        } catch (\Exception $ex) {
+            return $ex;
+        }
     }
 
     /**
@@ -271,7 +258,7 @@ class GeniusKSDK {
     }
 
     public function endpoint(string $uri = '') {
-        $endpoint = (($this->framework !== 'rest') ? $this->xmlURL : $this->restURI . $uri);
+        $endpoint = $this->restURI . $uri;
         return ((preg_match('/^https/', $uri)) ? $uri : str_replace('//', '/', $endpoint));
     }
 
@@ -283,7 +270,7 @@ class GeniusKSDK {
     public function request(string $endpoint, array $struct = null) {
         $options = $this->restruct($this->defaultOptions(), $struct);
         $method = $options['method'];
-        $header = array_merge((array) $options['header'], array('X-Keap-API-Key: ' . $this->apiKey));
+        $header = array_merge((array) $options['header'], array('Authorization: Bearer ' . $this->apiKey));
         $content = $options['content'];
         $curlOpts = array(
             CURLOPT_URL => $this->endpoint($endpoint),
@@ -298,7 +285,7 @@ class GeniusKSDK {
             CURLOPT_HEADER => 1,
             CURLOPT_ENCODING => '',
             CURLOPT_SSL_VERIFYPEER => true,
-            CURLOPT_CAPATH => __DIR__ . '/infusionsoft.pem',
+            CURLOPT_CAPATH => __DIR__ . '/cainfusionsoft.pem',
         );
         if (!empty($content)) {
             $curlOpts[CURLOPT_POSTFIELDS] = $content;
@@ -311,27 +298,16 @@ class GeniusKSDK {
         }
         $headerSize = curl_getinfo($curl, CURLINFO_HEADER_SIZE);
         curl_close($curl);
-        $responsHeader = $this->httpHeader(array_map('trim', (array) explode("\r", trim(substr($response, 0, $headerSize)))));
-        $responseBody = $this->httpBody(substr($response, $headerSize), $responsHeader);
-        switch ($this->framework) {
-            case 'xml':
-                if (isset($responseBody['faultString'])) {
-                    throw new \Exception('XML-RPC Error(' . $responseBody['faultCode'] . '): ' . $responseBody['faultString']);
-                }
-                break;
-            case 'rest':
-                if (isset($responseBody->code)) {
-                    throw new \Exception('REST Error(' . $responseBody->code . ' ' . $responseBody->status . '): ' . $responseBody->message);
-                }
-                break;
-            default:
-                break;
-        }
+        $responseHeader = $this->httpHeader(array_map('trim', (array) explode("\r", trim(substr($response, 0, $headerSize)))));
+        $keapStats = $this->keapStats($responseHeader);
+        $responseBody = $this->httpBody(substr($response, $headerSize), $responseHeader);
         return (object) array(
                     'engine' => 'cURL',
-                    'api' => $this->framework,
+                    'api' => 'rest\\' . $this->apiVersion,
                     'method' => $method,
-                    'header' => $responsHeader,
+                    'code' => (int) $responseHeader['code'],
+                    'keap' => $keapStats,
+                    'header' => $responseHeader,
                     'content' => $responseBody,
         );
     }
@@ -350,6 +326,19 @@ class GeniusKSDK {
         return $header;
     }
 
+    private function keapStats(array $struct) {
+        $stats = array();
+        foreach ((array) $struct as $key => $value) {
+            if (!preg_match('/^x-keap-/', $key)) {
+                continue;
+            }
+            $stat = str_replace('x-keap-', '', $key);
+            $stats[$stat] = $value;
+        }
+
+        return $stats;
+    }
+
     private function httpBody(string $content, array $header) {
         $contentType = ((isset($header['content-type'])) ? $header['content-type'] : '');
         if (preg_match('/application\/json/', $contentType)) {
@@ -357,9 +346,6 @@ class GeniusKSDK {
             if ($json !== null) {
                 return $json;
             }
-        }
-        if (preg_match('/text\/xml/', $contentType)) {
-            return xmlrpc_decode($content);
         }
 
         return $content;
@@ -370,8 +356,6 @@ class GeniusKSDK {
         foreach ((array) $params as $key => $value) {
             $this->{$key} = $value;
         }
-
-        $this->model = array('rest' => array(), 'xml' => array());
 
         $this->checkStruct();
     }
@@ -387,7 +371,7 @@ class GeniusKSDK {
     private function defaultStruct() {
         return array(
             'apiKey' => '',
-            'api' => 'rest',
+            'apiVersion' => 'v2',
         );
     }
 
@@ -399,14 +383,18 @@ class GeniusKSDK {
         );
     }
 
-    private function model(string $name, $framework = 'rest') {
-        $model = strtolower($name);
-        $this->framework($framework);
-        if (!isset($this->model[$this->framework][$model])) {
-            $className = '\GeniusKSDK\\' . $this->framework . '\\' . $name;
-            $this->model[$this->framework][$model] = new $className($this);
+    private function model(string $name, $apiVersion = null) {
+        $this->apiVersion($apiVersion);
+        $className = '\GeniusKSDK\REST\\' . $this->apiVersion . '\\' . $name;
+        $model = strtolower($className);
+        if (!isset($this->model[$model])) {
+            try {
+                $this->model[$model] = new $className($this);
+            } catch (\Exception $ex) {
+                return false;
+            }
         }
-        return $this->model[$this->framework][$model];
+        return $this->model[$model];
     }
 }
 
